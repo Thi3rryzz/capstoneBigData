@@ -27,3 +27,26 @@ my_db <- src_mysql(dbname = "batting",
                    user = "thierryligeon",
                    password = "119OKVU")
 ```
+
+waar bestaat de dataset uit?
+
+De totale data-set bestaat uit vier tabels:
+- mlb_batting.dat, hierin wordt er per rij de voor en achternaam van een slagman weergeven met de spelers ID. Ook worden de stats weergegeven per slagman met bijvoorbeeld het aantal home runs, strikeouts en stolen bases.
+- playbyplay2008.dat, hierin wordt er per rij een gebeurtenis weergegeven in het spel. hierbij wordt aangegeven wie die slagman is en wie de pitcher is. Ook wordt er gedetaileerde informatie weergegeven over hoe het spel verloopt, zoals het aantal slagen en de hoeveelheid spelers er op een honk staan.
+- roster2008.dat, hierin wordt aangegeven wat de beste pichers zijn?
+- pitchfx.dat, hierin wordt er per rij de gebeurtennissen weergegeven per pitch met bijvoorbeeld de soort pitch, de snelheid, de beweging en de locatie van de pitch in de strike zone. Ook wordt er informatie gegeven over de pitcher en de slag man.
+
+Om een duidelijker beeld te krijgen over wat er precies in de vier tabels staat kan bijlage 1 geraatpleegd worden.
+
+
+
+
+
+
+
+
+
+
+
+
+
