@@ -11,8 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## R Markdown
 
-Dit is het begin van ons RMD bestand voor de captstone!
+Dit is het begin van ons RMD bestand voor de capstone!
 
-```{r cars}
-summary(cars)
+## Importing data using mySQL
+
+```{importing_Data}
+my_db <- src_mysql(dbname = "batting", 
+                   host = "http://prdurbana0001.ict.hva.nl", 
+                   port = 3306, 
+                   user = "thierryligeon",
+                   password = "119OKVU")
 ```
