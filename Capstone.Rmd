@@ -1,5 +1,5 @@
 ---
-title: "Capstone"
+stitle: "Capstone"
 author: "Klaas Berbee & Thierry Ligeon"
 date: "25-10-2017"
 output: pdf_document
