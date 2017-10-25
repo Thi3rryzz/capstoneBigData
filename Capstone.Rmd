@@ -16,14 +16,17 @@ Dit is het begin van ons RMD bestand voor de capstone!
 ## Including libraries
 
 ```{r include_Packages}
+if (!require("dplyr")) install.packages("dplyr")
 library(dplyr)
 ```
 ## Importing data using mySQL
 
-```{r importing_Data}
-my_db <- src_mysql(dbname = "batting", 
-                   host = "http://prdurbana0001.ict.hva.nl", 
-                   port = 3306, 
-                   user = "thierryligeon",
-                   password = "119OKVU")
+```{r connecting_to_mySQL}
+my_db <- dbConnect(MySQL(), 
+                   user='klaasberbee', 
+                   password='119OKVU', 
+                   dbname='Batting', 
+                   host='localhost')
+
+print(dbListTables(my_db))
 ```
