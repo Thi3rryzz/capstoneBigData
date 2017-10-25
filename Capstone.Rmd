@@ -13,9 +13,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Dit is het begin van ons RMD bestand voor de capstone!
 
+## Including libraries
+
+```{r include_Packages}
+library(dplyr)
+```
 ## Importing data using mySQL
 
-```{importing_Data}
+```{r importing_Data}
 my_db <- src_mysql(dbname = "batting", 
                    host = "http://prdurbana0001.ict.hva.nl", 
                    port = 3306, 
