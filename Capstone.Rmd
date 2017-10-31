@@ -32,6 +32,17 @@ my_db <- dbConnect(MySQL(),
 
 print(dbListTables(my_db))
 ```
+```{r Loding all tables}
+dbTables <- dbListTables(my_db)
+
+allTables <-
+  lapply(dbTables, function(table) {
+    dbGetQuery(my_db, paste("select * from", table))
+  })
+names(allTables) <- paste("db", dbTables, sep = "_")
+list2env(allTables, envir = .GlobalEnv)
+```
+
 
 waar bestaat de dataset uit?
 
