@@ -42,27 +42,15 @@ allTables <-
 names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
+Uit deze datasets kan alle data gevonden worden over de de gehele teams, maar ook over de individuele spelers en managers, zoals hun salaris en hun stats. Verder wordt er weergegeven hoe een game verloopt en wat voor activiteiten er in voor komen en door wie deze zijn uitgevoert. Als laatst kan er ook uit de datasets opgemaakt worden hoeveel een speler verdiend. 
 
+Het doel is om deze dateset om te zetten naar informatie en dit dan vervolgens om te zetten naar kennis. Er kan namelijk met al deze data kennis worden opgebouwt zoals welke factoren zijn belangrijk voor een sterk team of wat maakt een bepaalde speler zo goed.
 
-waar bestaat de dataset uit?
+belanghebbende voor deze dataset:
+gokkers: Wanneer gokkers een voorspelmodel kunnen maken van deze dataset met wie er wint, dan kunnen zij er veel geld mee verdienen op goksites.
 
-De totale data-set bestaat uit zevenentwintig tabels:
- [1] "AllstarFull"         "Appearances"         "AwardsManagers"      "AwardsPlayers"      
- [5] "AwardsShareManagers" "AwardsSharePlayers"  "Batting"             "BattingPost"        
- [9] "CollegePlaying"      "Fielding"            "FieldingOF"          "FieldingOFsplit"    
-[13] "FieldingPost"        "HallOfFame"          "HomeGames"           "Managers"           
-[17] "ManagersHalf"        "Master"              "Parks"               "Pitching"           
-[21] "PitchingPost"        "Salaries"            "Schools"             "SeriesPost"         
-[25] "Teams"               "TeamsFranchises"     "TeamsHalf"   
+De coaches van de team: De coach kan uit deze data set halen wat de sterke en de zwake punten zijn van zijn spelers, hierdoor weet hij welke skils hij bij bepaalde spelers moet verbeteren. Ook is deze dataset handig voor hem omdat hij de zwake en de sterke punten van de tegenstander weet. Op deze mannier kan hij de inzet van zijn spelers inzetten dat hij er een voordeel uit kan halen.
 
+Spelers die op zoek zijn naar een opleidings schoool: De spelers die op zoek zijn naar een school waar ze hun basebal skils willen verbeteren kunnen uit deze dataset opmaken waar welke speler is opgeleid. Uit de dataset kan mischien ook wel opgemaakt worden welke skils je bij welke school goed leert. Dit zou dan kunnen helpen bij het maken van zijn beslissing.
 
-
-In de dataset is 
-- mlb_batting.dat, hierin wordt er per rij de voor en achternaam van een slagman weergeven met de spelers ID. Ook worden de stats weergegeven per slagman met bijvoorbeeld het aantal home runs, strikeouts en stolen bases.
-- playbyplay2008.dat, hierin wordt er per rij een gebeurtenis weergegeven in het spel. hierbij wordt aangegeven wie die slagman is en wie de pitcher is. Ook wordt er gedetaileerde informatie weergegeven over hoe het spel verloopt, zoals het aantal slagen en de hoeveelheid spelers er op een honk staan.
-- roster2008.dat, hierin wordt aangegeven wat de beste pichers zijn?
-- pitchfx.dat, hierin wordt er per rij de gebeurtennissen weergegeven per pitch met bijvoorbeeld de soort pitch, de snelheid, de beweging en de locatie van de pitch in de strike zone. Ook wordt er informatie gegeven over de pitcher en de slag man.
-
-Om een duidelijker beeld te krijgen over wat er precies in de vier tabels staat kan bijlage 1 geraatpleegd worden.
-
-
+de raad van een stadion: Uit deze dataset kan opgemaakt worden hoeveel kijkers er komen kijken bij een wedstrijd. Bij de ene wedstrijd komen er namelijk meer dan bij een ander. Dit wetende kan de raad van een stadion bijvoorbeeld zijn hoeveelheid personeel hierop aanpassen of de mate van beveiliging.
