@@ -18,8 +18,10 @@ Dit is het begin van ons RMD bestand voor de capstone!
 ```{r include_Packages}
 if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
+if (!require("CityPlot")) install.packages("CityPlot")
 library(dplyr)
 library(RMySQL)
+library(CityPlot)
 ```
 ## Importing data using mySQL
 Waar bestaat de dataset uit?
@@ -46,6 +48,7 @@ Uit deze datasets kan alle data gevonden worden over de de gehele teams, maar oo
 
 Het doel is om deze dateset om te zetten naar informatie en dit dan vervolgens om te zetten naar kennis. Er kan namelijk met al deze data kennis worden opgebouwt zoals welke factoren zijn belangrijk voor een sterk team of wat maakt een bepaalde speler zo goed.
 
+
 belanghebbende voor deze dataset:
 gokkers: Wanneer gokkers een voorspelmodel kunnen maken van deze dataset met wie er wint, dan kunnen zij er veel geld mee verdienen op goksites.
 
@@ -54,3 +57,62 @@ De coaches van de team: De coach kan uit deze data set halen wat de sterke en de
 Spelers die op zoek zijn naar een opleidings schoool: De spelers die op zoek zijn naar een school waar ze hun basebal skils willen verbeteren kunnen uit deze dataset opmaken waar welke speler is opgeleid. Uit de dataset kan mischien ook wel opgemaakt worden welke skils je bij welke school goed leert. Dit zou dan kunnen helpen bij het maken van zijn beslissing.
 
 de raad van een stadion: Uit deze dataset kan opgemaakt worden hoeveel kijkers er komen kijken bij een wedstrijd. Bij de ene wedstrijd komen er namelijk meer dan bij een ander. Dit wetende kan de raad van een stadion bijvoorbeeld zijn hoeveelheid personeel hierop aanpassen of de mate van beveiliging.
+
+Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
+```{r welke column is de p key}
+db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
+                 | duplicated(db_AllstarFull[c("playerID","gameID")], fromLast = TRUE)), ]
+db_Appearances[(duplicated(db_Appearances[c("playerID","yearID","teamID")])
+                 | duplicated(db_Appearances[c("playerID","yearID", "teamID")], fromLast = TRUE)), ]
+db_AwardsManagers[(duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")])
+                 | duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")], fromLast = TRUE)),]
+db_AwardsSharePlayers[(duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")])
+                 | duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")], fromLast = TRUE)),]
+db_AwardsShareManagers[(duplicated(db_AwardsShareManagers[c("playerID", "yearID")])
+                 | duplicated(db_AwardsShareManagers[c("playerID", "yearID")], fromLast = TRUE)), ]
+db_Batting[(duplicated(db_Batting[c("playerID", "yearID", "stint")])
+                 | duplicated(db_Batting[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
+db_BattingPost[(duplicated(db_BattingPost[c("playerID", "yearID", "round")])
+                 | duplicated(db_BattingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
+db_CollegePlaying[(duplicated(db_CollegePlaying[c("playerID", "yearID", "schoolID")])
+                 | duplicated(db_CollegePlaying[c("playerID", "yearID", "schoolID")], fromLast = TRUE)),]
+db_Fielding[(duplicated(db_Fielding[c("playerID", "yearID", "stint", "POS")])
+                 | duplicated(db_Fielding[c("playerID", "yearID", "stint", "POS")], fromLast = TRUE)),]
+db_FieldingOF[(duplicated(db_FieldingOF[c("playerID", "yearID", "stint")])
+                 | duplicated(db_FieldingOF[c("playerID", "yearID", "stint")], fromLast = TRUE)),]
+db_FieldingOFsplit[(duplicated(db_FieldingOFsplit[c("playerID", "yearID", "stint", "POS")])
+                 | duplicated(db_FieldingOFsplit[c("playerID", "yearID", "stint", "POS")], fromLast = TRUE)),]
+db_FieldingPost[(duplicated(db_FieldingPost[c("playerID", "yearID", "round", "POS")])
+                 | duplicated(db_FieldingPost[c("playerID", "yearID", "round", "POS")], fromLast = TRUE)),]
+db_HallOfFame[(duplicated(db_HallOfFame[c("playerID", "yearid", "votedBy")])
+                 | duplicated(db_HallOfFame[c("playerID", "yearid", "votedBy")], fromLast = TRUE)),]
+db_HomeGames[(duplicated(db_HomeGames[c("year.key", "team.key", "park.key")])
+                 | duplicated(db_HomeGames[c("year.key", "team.key", "park.key")], fromLast = TRUE)),]
+db_Managers[(duplicated(db_Managers[c("playerID", "yearID", "inseason")])
+                 | duplicated(db_Managers[c("playerID", "yearID", "inseason")], fromLast = TRUE)),]
+db_ManagersHalf[(duplicated(db_ManagersHalf[c("playerID","yearID","half")])
+      | duplicated(db_ManagersHalf[c("playerID","yearID","half")], fromLast = TRUE)), ]
+db_Master[(duplicated(db_Master["playerID"])
+                       | duplicated(db_Master["playerID"], fromLast = TRUE)), ]
+db_Parks[(duplicated(db_Parks["park.key"])
+       | duplicated(db_Parks["park.key"], fromLast = TRUE)), ]
+db_Pitching[(duplicated(db_Pitching[c("playerID", "yearID", "stint")])
+          | duplicated(db_Pitching[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
+db_PitchingPost[(duplicated(db_PitchingPost[c("playerID", "yearID", "round")])
+              | duplicated(db_PitchingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
+db_Salaries[(duplicated(db_Salaries[c("playerID", "yearID", "teamID")])
+          | duplicated(db_Salaries[c("playerID", "yearID", "teamID")], fromLast = TRUE)), ]
+db_Schools[(duplicated(db_Salaries["schoolID", ])
+         | duplicated(db_Salaries["schoolID", ], fromLast = TRUE)), ]
+db_SeriesPost[(duplicated(db_SeriesPost[c("yearID", "round")])
+       | duplicated(db_SeriesPost[c("yearID", "round")], fromLast = TRUE)), ]
+db_Teams[(duplicated(db_Teams[c("yearID", "franchID")])
+                 | duplicated(db_Teams[c("yearID", "franchID")], fromLast = TRUE)), ]
+db_TeamsFranchises[(duplicated(db_TeamsFranchises[c("franchID")])
+                 | duplicated(db_TeamsFranchises[c("franchID")], fromLast = TRUE)), ]
+db_TeamsHalf[(duplicated(db_TeamsHalf[c("teamID", "Half")])
+             | duplicated(db_TeamsHalf[c("teamID", "Half")], fromLast = TRUE)), ]
+```
+
+
+
