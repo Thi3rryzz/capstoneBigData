@@ -66,10 +66,12 @@ db_Appearances[(duplicated(db_Appearances[c("playerID","yearID","teamID")])
                  | duplicated(db_Appearances[c("playerID","yearID", "teamID")], fromLast = TRUE)), ]
 db_AwardsManagers[(duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")])
                  | duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")], fromLast = TRUE)),]
-db_AwardsSharePlayers[(duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")])
-                 | duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")], fromLast = TRUE)),]
+db_AwardsPlayers[(duplicated(db_AwardsPlayers[c("playerID","awardID", "yearID", "lgID")])
+                 | duplicated(db_AwardsPlayers[c("playerID","awardID", "yearID", "lgID")], fromLast = TRUE)),]
 db_AwardsShareManagers[(duplicated(db_AwardsShareManagers[c("playerID", "yearID")])
                  | duplicated(db_AwardsShareManagers[c("playerID", "yearID")], fromLast = TRUE)), ]
+db_AwardsSharePlayers[(duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")])
+                 | duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")], fromLast = TRUE)),]
 db_Batting[(duplicated(db_Batting[c("playerID", "yearID", "stint")])
                  | duplicated(db_Batting[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
 db_BattingPost[(duplicated(db_BattingPost[c("playerID", "yearID", "round")])
