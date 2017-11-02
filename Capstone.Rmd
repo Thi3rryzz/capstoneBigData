@@ -38,12 +38,37 @@ knitr::opts_chunk$set(echo = TRUE)
 \pagebreak
 \tableofcontents
 \pagebreak
-\textit{this page is intentionally left blank}
+\textit{This page is intentionally left blank.}
 \pagebreak
 \section{Capstone Batting}
 \textit{Klaas Berbee \& Thierry Ligeon}
 
-Voor de capstone van de minor Big-Data in urban technology aan de Hogeschool van Amsterdam moeten wij de Batting dataset gaan bestuderen. 
+Voor de capstone van de minor Big-Data in urban technology aan de Hogeschool van Amsterdam moeten wij de Batting dataset gaan bestuderen. Als eerste beginnen we met het globaal inzicht krijgen van de dataset.
+
+\subsection{Context van de dataset}
+
+De Batting dataset bevat data over o.a.: teams, spelers en managers. Ook bevat de dataset informatie over hun salarissen en skills. Verder bevat deze dataset informatie over hoe de individuele wedstrijden verlopen zijn, welke activiteiten hierin zijn voorgekomen en door wie deze zijn uitgevoerd. 
+
+Het doel is om deze dateset om te zetten naar nuttige informatie en dit vervolgens conclusies uit kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen in welke factoren een grote rol spelen in de prestatie van het team.
+
+
+\subsubsection{Belanghebbende voor deze dataset}
+
+\begin{description}
+
+\item[Kansspel spelers] \hfill \\
+Er kan een voordeel voor kansspelspelers ontstaan zodra zij bezitten over voorspelmodellen voor komende wedstrijden.
+
+\item[Teamcoaches] \hfill \\
+De coach kan uit de dataset de sterke en zwakke punten van de spelers inzien. Hierop kan hij zijn trainingen specificeren op bepaalde aspecten voor zijn spelers. Daarnaast kunnen de sterke en zwakke punten van de competitie bekeken worden om zo beter voor te kunnen bereiden oo aankomende wedstrijden.
+
+\item[Junior spelers] \hfill \\
+Beginnende spelers kunnen hun idolen en vaardigheden vergelijken en bekijken bij welke club zij getraind hebben. Dit zou een aanleiding kunnen zijn om een club te kiezen
+
+\item[Stadions] \hfill \\
+Met deze dataset kan de hoeveelheid bezoekers voorspeld worden. Hierop kunnen prijzen, hoeveelheid beveiliging en promotie op worden aangepast.
+
+\end{description}
 
 ```{r include_Packages, echo=FALSE, message=FALSE}
 if (!require("dplyr")) install.packages("dplyr")
@@ -76,15 +101,3 @@ allTables <-
 names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
-Uit deze datasets kan alle data gevonden worden over de de gehele teams, maar ook over de individuele spelers en managers, zoals hun salaris en hun stats. Verder wordt er weergegeven hoe een game verloopt en wat voor activiteiten er in voor komen en door wie deze zijn uitgevoert. Als laatst kan er ook uit de datasets opgemaakt worden hoeveel een speler verdiend. 
-
-Het doel is om deze dateset om te zetten naar informatie en dit dan vervolgens om te zetten naar kennis. Er kan namelijk met al deze data kennis worden opgebouwt zoals welke factoren zijn belangrijk voor een sterk team of wat maakt een bepaalde speler zo goed.
-
-belanghebbende voor deze dataset:
-gokkers: Wanneer gokkers een voorspelmodel kunnen maken van deze dataset met wie er wint, dan kunnen zij er veel geld mee verdienen op goksites.
-
-De coaches van de team: De coach kan uit deze data set halen wat de sterke en de zwake punten zijn van zijn spelers, hierdoor weet hij welke skils hij bij bepaalde spelers moet verbeteren. Ook is deze dataset handig voor hem omdat hij de zwake en de sterke punten van de tegenstander weet. Op deze mannier kan hij de inzet van zijn spelers inzetten dat hij er een voordeel uit kan halen.
-
-Spelers die op zoek zijn naar een opleidings schoool: De spelers die op zoek zijn naar een school waar ze hun basebal skils willen verbeteren kunnen uit deze dataset opmaken waar welke speler is opgeleid. Uit de dataset kan mischien ook wel opgemaakt worden welke skils je bij welke school goed leert. Dit zou dan kunnen helpen bij het maken van zijn beslissing.
-
-de raad van een stadion: Uit deze dataset kan opgemaakt worden hoeveel kijkers er komen kijken bij een wedstrijd. Bij de ene wedstrijd komen er namelijk meer dan bij een ander. Dit wetende kan de raad van een stadion bijvoorbeeld zijn hoeveelheid personeel hierop aanpassen of de mate van beveiliging.
