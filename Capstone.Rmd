@@ -2,27 +2,59 @@
 stitle: "Capstone"
 author: "Klaas Berbee & Thierry Ligeon"
 date: "25-10-2017"
-output: pdf_document
+header-includes: \usepackage{hyperref,pdfpages,graphicx}
+output: 
+  pdf_document:
+    number_sections: true
+    highlight: tango
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+\begin{titlepage}
+\centering
+	\includegraphics[width=0.15\textwidth]{intro}\par\vspace{1cm}
+	{\scshape\LARGE Hogeschool van Amsterdam \par}
+	\vspace{1cm}
+	{\scshape\Large Capstone Big-Data in urban technology\par}
+	\vspace{1.5cm}
+	{\huge\bfseries Batting\par}
+	\vspace{2cm}
+	{\Large\itshape Klaas Berbee\par}
+	{\Large\itshape Thierry Ligeon\par}
+	\vfill
+	supervised by\par
+	Dr.~J.R. \textsc{Helmus}
 
-## R Markdown
+	\vfill
 
-Dit is het begin van ons RMD bestand voor de capstone!
+% Bottom of the page
+	{\large \today\par}
 
-## Including libraries
 
-```{r include_Packages}
+\end{titlepage}
+\flushleft
+\pagebreak
+\tableofcontents
+\pagebreak
+\textit{this page is intentionally left blank}
+\pagebreak
+\section{Capstone Batting}
+\textit{Klaas Berbee \& Thierry Ligeon}
+
+Voor de capstone van de minor Big-Data in urban technology aan de Hogeschool van Amsterdam moeten wij de Batting dataset gaan bestuderen. 
+
+```{r include_Packages, echo=FALSE, message=FALSE}
 if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
 library(dplyr)
 library(RMySQL)
 ```
-## Importing data using mySQL
-Waar bestaat de dataset uit?
+\subsection{Data importeren via mySQL}
+Verbinding maken met de mySQL database.
+
+Vervolgens maken we verbinding met de locale mySQL server. Vervolgens drukken we alle tabellen van de database af.
 ```{r connecting_to_mySQL}
 my_db <- dbConnect(MySQL(), 
                    user='klaasberbee', 
@@ -32,6 +64,8 @@ my_db <- dbConnect(MySQL(),
 
 print(dbListTables(my_db))
 ```
+Hier kunnen we zien dat de Batting dataset uit 27 verschillende tabellen bestaat. Uit de ERD analyse was gebleken dat ..... de belangrijkste tabellen zijn.
+
 ```{r Loding all tables}
 dbTables <- dbListTables(my_db)
 
