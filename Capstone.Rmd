@@ -93,27 +93,35 @@ db_HomeGames[(duplicated(db_HomeGames[c("year.key", "team.key", "park.key")])
 db_Managers[(duplicated(db_Managers[c("playerID", "yearID", "inseason")])
                  | duplicated(db_Managers[c("playerID", "yearID", "inseason")], fromLast = TRUE)),]
 db_ManagersHalf[(duplicated(db_ManagersHalf[c("playerID","yearID","half")])
-      | duplicated(db_ManagersHalf[c("playerID","yearID","half")], fromLast = TRUE)), ]
+                 | duplicated(db_ManagersHalf[c("playerID","yearID","half")], fromLast = TRUE)), ]
 db_Master[(duplicated(db_Master["playerID"])
-                       | duplicated(db_Master["playerID"], fromLast = TRUE)), ]
+                 | duplicated(db_Master["playerID"], fromLast = TRUE)), ]
 db_Parks[(duplicated(db_Parks["park.key"])
-       | duplicated(db_Parks["park.key"], fromLast = TRUE)), ]
+                 | duplicated(db_Parks["park.key"], fromLast = TRUE)), ]
 db_Pitching[(duplicated(db_Pitching[c("playerID", "yearID", "stint")])
-          | duplicated(db_Pitching[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
+                 | duplicated(db_Pitching[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
 db_PitchingPost[(duplicated(db_PitchingPost[c("playerID", "yearID", "round")])
-              | duplicated(db_PitchingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
+                 | duplicated(db_PitchingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
 db_Salaries[(duplicated(db_Salaries[c("playerID", "yearID", "teamID")])
-          | duplicated(db_Salaries[c("playerID", "yearID", "teamID")], fromLast = TRUE)), ]
+                 | duplicated(db_Salaries[c("playerID", "yearID", "teamID")], fromLast = TRUE)), ]
 db_Schools[(duplicated(db_Salaries["schoolID", ])
-         | duplicated(db_Salaries["schoolID", ], fromLast = TRUE)), ]
+                 | duplicated(db_Salaries["schoolID", ], fromLast = TRUE)), ]
 db_SeriesPost[(duplicated(db_SeriesPost[c("yearID", "round")])
-       | duplicated(db_SeriesPost[c("yearID", "round")], fromLast = TRUE)), ]
-db_Teams[(duplicated(db_Teams[c("yearID", "franchID")])
-                 | duplicated(db_Teams[c("yearID", "franchID")], fromLast = TRUE)), ]
+                 | duplicated(db_SeriesPost[c("yearID", "round")], fromLast = TRUE)), ]
+db_Teams[(duplicated(db_Teams[c("yearID", "teamID")])
+                 | duplicated(db_Teams[c("yearID", "teamID")], fromLast = TRUE)), ]
 db_TeamsFranchises[(duplicated(db_TeamsFranchises[c("franchID")])
                  | duplicated(db_TeamsFranchises[c("franchID")], fromLast = TRUE)), ]
 db_TeamsHalf[(duplicated(db_TeamsHalf[c("teamID", "Half")])
-             | duplicated(db_TeamsHalf[c("teamID", "Half")], fromLast = TRUE)), ]
+                 | duplicated(db_TeamsHalf[c("teamID", "Half")], fromLast = TRUE)), ]
+glimpse(db_AllstarFull)
+
+db_Managers %>%
+  filter(yearID == 1892)
+
+db_ManagersHalf %>%
+  filter(yearID == 1892)
+nrow(db_AwardsManagers)
 ```
 
 
