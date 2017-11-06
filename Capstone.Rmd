@@ -74,7 +74,13 @@ Met deze dataset kan de hoeveelheid bezoekers voorspeld worden. Hierop kunnen pr
 Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2012\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn onstaan.
 
 \subsubsection{Hedendaagse problemen oplossen m.b.v. deze dataset}
-De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data van afgelopen jaren, en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd.
+De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data van afgelopen jaren, en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd. Dit zou eveneens met de uitslagen van 2013 tot en met 2016 gedaan worden. Hieruit kan ook afgeleid worden of het model effectief blijft in de toekomst.
+
+\subsection{Database Theorie}
+\subsubsection{Entity-Relationship Diagram}
+De Batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
+Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen 
+
 
 ```{r include_Packages, echo=FALSE, message=FALSE}
 if (!require("dplyr")) install.packages("dplyr")
