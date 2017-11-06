@@ -2,20 +2,75 @@
 stitle: "Capstone"
 author: "Klaas Berbee & Thierry Ligeon"
 date: "25-10-2017"
-output: pdf_document
+header-includes: \usepackage{hyperref,pdfpages,graphicx}
+output: 
+  pdf_document:
+    number_sections: true
+    highlight: tango
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+\begin{titlepage}
+\centering
+	\includegraphics[width=0.15\textwidth]{intro}\par\vspace{1cm}
+	{\scshape\LARGE Hogeschool van Amsterdam \par}
+	\vspace{1cm}
+	{\scshape\Large Capstone Big-Data in urban technology\par}
+	\vspace{1.5cm}
+	{\huge\bfseries Batting\par}
+	\vspace{2cm}
+	{\Large\itshape Klaas Berbee\par}
+	{\Large\itshape Thierry Ligeon\par}
+	\vfill
+	supervised by\par
+	Dr.~J.R. \textsc{Helmus}
 
-## R Markdown
+	\vfill
 
-Dit is het begin van ons RMD bestand voor de capstone!
+% Bottom of the page
+	{\large \today\par}
 
-## Including libraries
 
-```{r include_Packages}
+\end{titlepage}
+\flushleft
+\pagebreak
+\tableofcontents
+\pagebreak
+\textit{This page is intentionally left blank.}
+\pagebreak
+\section{Capstone Batting}
+\textit{Klaas Berbee \& Thierry Ligeon}
+
+Voor de capstone van de minor Big-Data in urban technology aan de Hogeschool van Amsterdam moeten wij de Batting dataset gaan bestuderen. Als eerste beginnen we met het globaal inzicht krijgen van de dataset.
+
+\subsection{Context van de dataset}
+
+De Batting dataset bevat data over o.a.: teams, spelers en managers. Ook bevat de dataset informatie over hun salarissen en skills. Verder bevat deze dataset informatie over hoe de individuele wedstrijden verlopen zijn, welke activiteiten hierin zijn voorgekomen en door wie deze zijn uitgevoerd. 
+
+Het doel is om deze dateset om te zetten naar nuttige informatie en dit vervolgens conclusies uit kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen in welke factoren een grote rol spelen in de prestatie van het team.
+
+
+\subsubsection{Belanghebbende voor deze dataset}
+
+\begin{description}
+
+\item[Kansspel spelers] \hfill \\
+Er kan een voordeel voor kansspelspelers ontstaan zodra zij bezitten over voorspelmodellen voor komende wedstrijden.
+
+\item[Teamcoaches] \hfill \\
+De coach kan uit de dataset de sterke en zwakke punten van de spelers inzien. Hierop kan hij zijn trainingen specificeren op bepaalde aspecten voor zijn spelers. Daarnaast kunnen de sterke en zwakke punten van de competitie bekeken worden om zo beter voor te kunnen bereiden oo aankomende wedstrijden.
+
+\item[Junior spelers] \hfill \\
+Beginnende spelers kunnen hun idolen en vaardigheden vergelijken en bekijken bij welke club zij getraind hebben. Dit zou een aanleiding kunnen zijn om een club te kiezen
+
+\item[Stadions] \hfill \\
+Met deze dataset kan de hoeveelheid bezoekers voorspeld worden. Hierop kunnen prijzen, hoeveelheid beveiliging en promotie op worden aangepast.
+
+\end{description}
+
+```{r include_Packages, echo=FALSE, message=FALSE}
 if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
 if (!require("CityPlot")) install.packages("CityPlot")
@@ -23,8 +78,10 @@ library(dplyr)
 library(RMySQL)
 library(CityPlot)
 ```
-## Importing data using mySQL
-Waar bestaat de dataset uit?
+\subsection{Data importeren via mySQL}
+Verbinding maken met de mySQL database.
+
+Vervolgens maken we verbinding met de locale mySQL server. Vervolgens drukken we alle tabellen van de database af.
 ```{r connecting_to_mySQL}
 my_db <- dbConnect(MySQL(), 
                    user='klaasberbee', 
@@ -34,6 +91,8 @@ my_db <- dbConnect(MySQL(),
 
 print(dbListTables(my_db))
 ```
+Hier kunnen we zien dat de Batting dataset uit 27 verschillende tabellen bestaat. Uit de ERD analyse was gebleken dat ..... de belangrijkste tabellen zijn.
+
 ```{r Loding all tables}
 dbTables <- dbListTables(my_db)
 
@@ -44,6 +103,7 @@ allTables <-
 names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
+<<<<<<< HEAD
 Uit deze datasets kan alle data gevonden worden over de de gehele teams, maar ook over de individuele spelers en managers, zoals hun salaris en hun stats. Verder wordt er weergegeven hoe een game verloopt en wat voor activiteiten er in voor komen en door wie deze zijn uitgevoert. Als laatst kan er ook uit de datasets opgemaakt worden hoeveel een speler verdiend. 
 
 Het doel is om deze dateset om te zetten naar informatie en dit dan vervolgens om te zetten naar kennis. Er kan namelijk met al deze data kennis worden opgebouwt zoals welke factoren zijn belangrijk voor een sterk team of wat maakt een bepaalde speler zo goed.
@@ -126,3 +186,5 @@ nrow(db_AwardsManagers)
 
 
 
+=======
+>>>>>>> f01fbbc1f2af7befd999b97931cce608c82706ae
