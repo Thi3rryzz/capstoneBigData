@@ -70,13 +70,17 @@ Met deze dataset kan de hoeveelheid bezoekers voorspeld worden. Hierop kunnen pr
 
 \end{description}
 
+\subsubsection{Hoe de dataset tot stand gekomen is}
+Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2012\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn onstaan.
+
+\subsubsection{Hedendaagse problemen oplossen m.b.v. deze dataset}
+De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data van afgelopen jaren, en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd.
+
 ```{r include_Packages, echo=FALSE, message=FALSE}
 if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
-if (!require("CityPlot")) install.packages("CityPlot")
 library(dplyr)
 library(RMySQL)
-library(CityPlot)
 ```
 \subsection{Data importeren via mySQL}
 Verbinding maken met de mySQL database.
@@ -103,23 +107,9 @@ allTables <-
 names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
-<<<<<<< HEAD
-Uit deze datasets kan alle data gevonden worden over de de gehele teams, maar ook over de individuele spelers en managers, zoals hun salaris en hun stats. Verder wordt er weergegeven hoe een game verloopt en wat voor activiteiten er in voor komen en door wie deze zijn uitgevoert. Als laatst kan er ook uit de datasets opgemaakt worden hoeveel een speler verdiend. 
-
-Het doel is om deze dateset om te zetten naar informatie en dit dan vervolgens om te zetten naar kennis. Er kan namelijk met al deze data kennis worden opgebouwt zoals welke factoren zijn belangrijk voor een sterk team of wat maakt een bepaalde speler zo goed.
-
-
-belanghebbende voor deze dataset:
-gokkers: Wanneer gokkers een voorspelmodel kunnen maken van deze dataset met wie er wint, dan kunnen zij er veel geld mee verdienen op goksites.
-
-De coaches van de team: De coach kan uit deze data set halen wat de sterke en de zwake punten zijn van zijn spelers, hierdoor weet hij welke skils hij bij bepaalde spelers moet verbeteren. Ook is deze dataset handig voor hem omdat hij de zwake en de sterke punten van de tegenstander weet. Op deze mannier kan hij de inzet van zijn spelers inzetten dat hij er een voordeel uit kan halen.
-
-Spelers die op zoek zijn naar een opleidings schoool: De spelers die op zoek zijn naar een school waar ze hun basebal skils willen verbeteren kunnen uit deze dataset opmaken waar welke speler is opgeleid. Uit de dataset kan mischien ook wel opgemaakt worden welke skils je bij welke school goed leert. Dit zou dan kunnen helpen bij het maken van zijn beslissing.
-
-de raad van een stadion: Uit deze dataset kan opgemaakt worden hoeveel kijkers er komen kijken bij een wedstrijd. Bij de ene wedstrijd komen er namelijk meer dan bij een ander. Dit wetende kan de raad van een stadion bijvoorbeeld zijn hoeveelheid personeel hierop aanpassen of de mate van beveiliging.
 
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
-```{r welke column is de p key}
+```{r welke column is de p key, echo=FALSE, message=FALSE}
 db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
                  | duplicated(db_AllstarFull[c("playerID","gameID")], fromLast = TRUE)), ]
 db_Appearances[(duplicated(db_Appearances[c("playerID","yearID","teamID")])
@@ -184,7 +174,13 @@ db_ManagersHalf %>%
 nrow(db_AwardsManagers)
 ```
 
+\begin{thebibliography}{9}
 
+\bibitem{seanlahman} 
+Sean Lahman, Batting database explanation 2012,
+\\\texttt{http://seanlahman.com/files/database/readme2012.txt}
 
-=======
->>>>>>> f01fbbc1f2af7befd999b97931cce608c82706ae
+\bibitem{houstonastros}
+AD: Houston Astros verslaan Los Angeles Dodgers, 2017,
+\\\texttt{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}
+\end{thebibliography}
