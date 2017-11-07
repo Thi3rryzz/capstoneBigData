@@ -89,6 +89,8 @@ De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston A
 De Batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
 Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
 
+Door alle tabellen uit de database te bekijken zijn we tot onderstaand ERD gekomen:
+
 \subsubsection{Datawarehouse}
 
 \subsection{Extract Transform Load}
@@ -119,15 +121,50 @@ list2env(allTables, envir = .GlobalEnv)
 ```
 
 \subsubsection{Data transformeren}
-De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Om dit te verifieren voeren wij een 0e functie uit op enkele tabellen.
+De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Om dit te verifieren voeren wij een 0e functie uit op het Pitching tabel.
 
 ```{r glimpsing}
 glimpse(db_Pitching)
+```
+
+Dat is dus echter incorrect. Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Intergers, Doubles en Characters. Echter is de class van teamID en lgID nog incorrect, dit zou een factor moeten zijn. Dit betekend dat dit in meerdere tabellen een probleem kan zijn. Kijkend naar de vragen in de opdrachtbeschrijving hebben we besloten om vanaf nu gebruik te maken van de volgende tabellen:
+\begin{itemize}
+\item Pitching
+\item Batting
+\item Fielding
+\item Teams
+\item Salaries
+\end{itemize}
+```{r Viewing table classes}
 glimpse(db_Batting)
 glimpse(db_Fielding)
-
+glimpse(db_Teams)
+glimpse(db_Salaries)
 ```
+
+```{r Transforming table classes}
+db_Pitching$teamID = as.factor(db_Pitching$teamID)
+db_Pitching$lgID = as.factor(db_Pitching$lgID)
+
+db_Batting$teamID = as.factor(db_Batting$teamID)
+db_Batting$lgID = as.factor(db_Batting$lgID)
+
+db_Fielding$teamID = as.factor(db_Fielding$teamID)
+db_Fielding$lgID = as.factor(db_Fielding$lgID)
+db_Fielding$POS = as.factor(db_Fielding$POS)
+
+db_Teams$teamID = as.factor(db_Teams$teamID)
+db_Teams$lgID = as.factor(db_Teams$lgID)
+db_Teams$franchID = as.factor(db_Teams$franchID)
+db_Teams$divID = as.factor(db_Teams$divID)
+db_Teams$teamIDBR
+
+db_Salaries$teamID = as.factor(db_Salaries$teamID)
+db_Salaries$lgID = as.factor(db_Salaries$lgID)
+```
+
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
+
 ```{r welke column is de p key, echo=FALSE, results="hide"}
 db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
                  | duplicated(db_AllstarFull[c("playerID","gameID")], fromLast = TRUE)), ]
