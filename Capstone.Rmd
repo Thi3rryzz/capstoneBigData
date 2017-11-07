@@ -16,8 +16,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r include_Packages, echo=FALSE, message=FALSE}
 if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
+if (!require("Amelia")) install.packages("Amelia")
 library(dplyr)
 library(RMySQL)
+library(Amelia)
 ```
 
 \begin{titlepage}
@@ -121,13 +123,13 @@ list2env(allTables, envir = .GlobalEnv)
 ```
 
 \subsubsection{Data transformeren}
-De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Om dit te verifieren voeren wij een 0e functie uit op het Pitching tabel.
+De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Ons ERD gaf dit ook al aan. Om dit te verifieren voeren wij een 0e functie uit op het Pitching tabel.
 
 ```{r glimpsing}
 glimpse(db_Pitching)
 ```
 
-Dat is dus echter incorrect. Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Intergers, Doubles en Characters. Echter is de class van teamID en lgID nog incorrect, dit zou een factor moeten zijn. Dit betekend dat dit in meerdere tabellen een probleem kan zijn. Kijkend naar de vragen in de opdrachtbeschrijving hebben we besloten om vanaf nu gebruik te maken van de volgende tabellen:
+Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Intergers, Doubles en Characters. Echter is de class van teamID en lgID nog incorrect, dit zou een factor moeten zijn. Dit betekend dat dit in meerdere tabellen een probleem kan zijn. Kijkend naar de vragen in de opdrachtbeschrijving hebben we besloten om vanaf nu gebruik te maken van de volgende tabellen:
 \begin{itemize}
 \item Pitching
 \item Batting
@@ -157,10 +159,28 @@ db_Teams$teamID = as.factor(db_Teams$teamID)
 db_Teams$lgID = as.factor(db_Teams$lgID)
 db_Teams$franchID = as.factor(db_Teams$franchID)
 db_Teams$divID = as.factor(db_Teams$divID)
-db_Teams$teamIDBR
+db_Teams$teamIDBR = as.factor(db_Teams$teamIDBR)
+db_Teams$teamIDlahman45 = as.factor(db_Teams$teamIDlahman45)
+db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
 
 db_Salaries$teamID = as.factor(db_Salaries$teamID)
 db_Salaries$lgID = as.factor(db_Salaries$lgID)
+```
+
+Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen verwerken in dezelfde R-Studio omgeving.
+
+\subsection{Data Exploreren}
+
+Om te beginnen met het data exploratie proces moeten wij een tabel gebruiken dat verschillende klassen variabele bevat. Hier moeten we voervolgens de summary functie op uit voeren (1e orde functie).
+Als voorbeeld nemen wij het tabel Pitching.
+
+```{r Summary on table}
+summary(db_Pitching)
+```
+
+Vervolgens kijken wij naar de ontbrekende data met behulp van een missing map.
+```{r Create missingmap from Pitching}
+missmap(db_Pitching, col=c("wheat","darkred"), legend=FALSE)
 ```
 
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
