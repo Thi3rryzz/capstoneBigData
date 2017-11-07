@@ -129,7 +129,7 @@ De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde typ
 glimpse(db_Pitching)
 ```
 
-Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Intergers, Doubles en Characters. Echter is de class van teamID en lgID nog incorrect, dit zou een factor moeten zijn. Dit betekend dat dit in meerdere tabellen een probleem kan zijn. Kijkend naar de vragen in de opdrachtbeschrijving hebben we besloten om vanaf nu gebruik te maken van de volgende tabellen:
+Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Intergers, Doubles en Characters. Echter is de class van teamID en lgID nog incorrect, dit zouden een factoren moeten zijn. Daarnaast zijn ook enkele Interger kolommen opgevat als Characters. Dit betekend dat dit in meerdere tabellen een probleem kan zijn. Kijkend naar de vragen in de opdrachtbeschrijving hebben we besloten om vanaf nu gebruik te maken van de volgende tabellen:
 \begin{itemize}
 \item Pitching
 \item Batting
@@ -144,21 +144,58 @@ glimpse(db_Teams)
 glimpse(db_Salaries)
 ```
 
+Aan de hand van deze 0e orde functie resultaten passen wij ook de rest van de incorrete classes aan.
+
+
 ```{r Transforming table classes}
+#db_Pitching
+
 db_Pitching$teamID = as.factor(db_Pitching$teamID)
 db_Pitching$lgID = as.factor(db_Pitching$lgID)
+db_Pitching$BAOpp = as.double(db_Pitching$BAOpp)
+db_Pitching$IBB = as.interger(db_Pitching$IBB)
+db_Pitching$WP = as.interger(db_Pitching$WP)
+db_Pitching$HBP = as.interger(db_Pitching$HBP)
+db_Pitching$BFP = as.interger(db_Pitching$BFP)
+db_Pitching$GF = as.interger(db_Pitching$GF)
+db_Pitching$SH = as.interger(db_Pitching$SH)
+db_Pitching$SF = as.interger(db_Pitching$SF)
+db_Pitching$GIDP = as.integer(db_Pitching$GIDP)
 
+#db_Batting
 db_Batting$teamID = as.factor(db_Batting$teamID)
 db_Batting$lgID = as.factor(db_Batting$lgID)
+db_Batting$IBB = as.interger(db_Batting$IBB)
+db_Batting$HBP = as.interger(db_Batting$HBP)
+db_Batting$SH = as.interger(db_Batting$SH)
+db_Batting$SF = as.interger(db_Batting$SF)
+db_Batting$GIDP = as.integer(db_Batting$GIDP)
 
 db_Fielding$teamID = as.factor(db_Fielding$teamID)
 db_Fielding$lgID = as.factor(db_Fielding$lgID)
 db_Fielding$POS = as.factor(db_Fielding$POS)
+db_Fielding$GS = as.interger(db_Fielding$GS)
+db_Fielding$InnOuts = as.interger(db_Fielding$InnOuts)
+db_Fielding$PB = as.interger(db_Fielding$PB)
+db_Fielding$WP = as.interger(db_Fielding$WP)
+db_Fielding$SB = as.interger(db_Fielding$SB)
+db_Fielding$CS = as.interger(db_Fielding$CS)
+db_Fielding$ZR = as.interger(db_Fielding$ZR)
 
 db_Teams$teamID = as.factor(db_Teams$teamID)
 db_Teams$lgID = as.factor(db_Teams$lgID)
 db_Teams$franchID = as.factor(db_Teams$franchID)
 db_Teams$divID = as.factor(db_Teams$divID)
+db_Teams$Ghome = as.interger(db_Teams$Ghome)
+db_Teams$DivWin = as.factor(db_Teams$DivWin)
+db_Teams$WCWin = as.factor(db_Teams$WCWin)
+db_Teams$LgWin = as.factor(db_Teams$LgWin)
+db_Teams$WSWin = as.factor(db_Teams$WSWin)
+db_Teams$CS = as.interger(db_Teams$CS)
+db_Teams$HBP = as.interger(db_Teams$HBP)
+db_Teams$SF = as.interger(db_Teams$SF)
+db_Teams$DP = as.interger(db_Teams$DP)
+db_Teams$attendance = as.interger(db_Teams$attendance)
 db_Teams$teamIDBR = as.factor(db_Teams$teamIDBR)
 db_Teams$teamIDlahman45 = as.factor(db_Teams$teamIDlahman45)
 db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
@@ -167,6 +204,12 @@ db_Salaries$teamID = as.factor(db_Salaries$teamID)
 db_Salaries$lgID = as.factor(db_Salaries$lgID)
 ```
 
+De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
+
+```{r Define N/A's}
+db_Pitching
+
+```
 Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen verwerken in dezelfde R-Studio omgeving.
 
 \subsection{Data Exploreren}
