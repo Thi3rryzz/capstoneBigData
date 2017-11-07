@@ -205,10 +205,12 @@ db_Salaries$lgID = as.factor(db_Salaries$lgID)
 ```
 
 De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
-
 ```{r Define N/A's}
-db_Pitching
-
+db_Pitching[db_Pitching == ""] = NA
+db_Batting[db_Batting == ""] = NA
+db_Fielding[db_Fielding == ""] = NA
+db_Teams[db_Teams == ""] = NA
+db_Salaries[db_Salaries == ""] = NA
 ```
 Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen verwerken in dezelfde R-Studio omgeving.
 
@@ -223,7 +225,7 @@ summary(db_Pitching)
 
 Vervolgens kijken wij naar de ontbrekende data met behulp van een missing map.
 ```{r Create missingmap from Pitching}
-missmap(db_Pitching, col=c("wheat","darkred"), legend=FALSE)
+missmap(db_Pitching, col=c("black", "grey"), legend=FALSE)
 ```
 
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
