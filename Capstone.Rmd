@@ -87,20 +87,15 @@ De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston A
 \subsection{Database Theorie}
 \subsubsection{Entity-Relationship Diagram}
 De Batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
-Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen 
-
+Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
 
 \subsubsection{Datawarehouse}
 
-
 \subsection{Extract Transform Load}
-Na het opstellen van het ERD en het DWH kunnen we beginnen aan het ETL proces. Des te beter dit proces wordt uitgevoerd, des te makkelijker de rest van het data Analyst proces wordt. De data is opgeslagen in een lokale MySQL Database.  
+Na het opstellen van het ERD en het DWH kunnen we beginnen aan het ETL proces. Des te beter dit proces wordt uitgevoerd, des te makkelijker het daadwerkelijke data analyse proces wordt. De data is opgeslagen in een lokale MySQL Database.
 
-
-\subsection{Data importeren via mySQL}
-Verbinding maken met de mySQL database.
-
-Vervolgens maken we verbinding met de locale mySQL server. Vervolgens drukken we alle tabellen van de database af.
+\subsubsection{Data importeren via MySQL}
+Via R-Studio en de package RMySQL kunnen wij een verbinding met een database opzetten. Dit doen wij op de hieronderstaande wijze, Vervolgens bekijken wij welke tabellen de MySQL dataset bevat.
 ```{r connecting_to_mySQL}
 my_db <- dbConnect(MySQL(), 
                    user='klaasberbee', 
@@ -110,9 +105,9 @@ my_db <- dbConnect(MySQL(),
 
 print(dbListTables(my_db))
 ```
-Hier kunnen we zien dat de Batting dataset uit 27 verschillende tabellen bestaat. Uit de ERD analyse was gebleken dat ..... de belangrijkste tabellen zijn.
+De database bestaat uit 27 verschillende tabellen, Dit zijn ook de tabellen die wij in onze ERD verwerkt hebben. Uit gemak importeren wij alle tabellen en besluiten wij later in de R-Studio omgeving welke tabellen wij zullen benutten.
 
-```{r Loding all tables}
+```{r Loding all tables, results="hide"}
 dbTables <- dbListTables(my_db)
 
 allTables <-
@@ -123,8 +118,17 @@ names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
 
+\subsubsection{Data transformeren}
+De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Om dit te verifieren voeren wij een 0e functie uit op enkele tabellen.
+
+```{r glimpsing}
+glimpse(db_Pitching)
+glimpse(db_Batting)
+glimpse(db_Fielding)
+
+```
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
-```{r welke column is de p key, echo=FALSE, message=FALSE}
+```{r welke column is de p key, echo=FALSE, results="hide"}
 db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
                  | duplicated(db_AllstarFull[c("playerID","gameID")], fromLast = TRUE)), ]
 db_Appearances[(duplicated(db_Appearances[c("playerID","yearID","teamID")])
