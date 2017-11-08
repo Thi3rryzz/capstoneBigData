@@ -218,7 +218,7 @@ db_Salaries[db_Salaries == ""] = NA
 Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen analyseren in dezelfde R-Studio omgeving.
 
 \subsection{Data Exploreren}
-
+\subsubsection{Missende Data}
 Om te beginnen met het data exploratie proces moeten wij een tabel gebruiken dat verschillende klassen variabele bevat. Hier moeten we voervolgens de summary functie op uit voeren (1e orde functie).
 Als voorbeeld nemen wij het tabel Pitching.
 
@@ -238,7 +238,17 @@ Uit de missing map van het pitching tabel valt op te maken dat de kolommen: GIDP
 
 Bij het Fielding tabel mist er veel meer data. Voor de colommen: ZR, WP, CS, SB en PB mist er erg onrgelematig data. Bij InnOuts is dit iets consistenter maar zit er ook nogsteeds een apart gat. De missende waarden voor WP, CS, SB en PB zijn wel te verklaren. Deze variabelen gelden alleen voor Catchers, en aangezien het Fielding tabel spelers bevat voor alle posities zou het kunnnen kloppen dat deze waarden alleen bekend zijn voor de catchers. de ZR (Zone Rating) kolom zou echter wel voor elke speler bekend moeten zijn, en niet voor enkele catchers. De aparte missende data bij InnsOuts heb ik echter ook geen verdere verklaring voor.
 
+\subsubsection{Distributie}
 
+
+
+
+\subsubsection{Relaties}
+De laatste stap van de data exploratie is het bekijken van mogelijke correlaties tussen verschillende variabelen. Dit kan erg gemakkelijk met behulp van de pairs functie.
+
+```{r Pairs}
+pairs(db_Batting[,c(2:22)])
+```
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
 
 ```{r welke column is de p key, echo=FALSE, results="hide"}
