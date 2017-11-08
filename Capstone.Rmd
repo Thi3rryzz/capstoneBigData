@@ -17,9 +17,11 @@ knitr::opts_chunk$set(echo = TRUE)
 if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
 if (!require("Amelia")) install.packages("Amelia")
+if (!require("ggplot2")) install.packages("ggplot2")
 library(dplyr)
 library(RMySQL)
 library(Amelia)
+library(ggplot2)
 ```
 
 \begin{titlepage}
@@ -91,6 +93,8 @@ De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston A
 De Batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
 Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
 - De eene dataset gaat langer terug dan de ander, bij het joinen van de ERD gaat dan sommige data verloren.
+- Het overzicht na het mergen van deze ERD is direct weg.
+-
 
 Door alle tabellen uit de database te bekijken zijn we tot onderstaand ERD gekomen:
 
@@ -304,6 +308,25 @@ db_ManagersHalf %>%
   filter(yearID == 1892)
 nrow(db_AwardsManagers)
 ```
+
+```{r verdelingen}
+aantalHR <- db_Pitching %>%
+  group_by(HR)%>%
+   summarise(observaties = n())
+
+ggplot(aantalHR, aes(x=HR, y=observaties)) +
+  geom_point(color = "gray30", size=1) +
+  labs(y= "Aantal observaties", x = "Aantal homeruns per speler per jaar \n note: wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal homeruns opnieuw geteld" , title = "Het aantal hoeveelheid homeruns worden er door een speler per jaar gemaakt")
+
+aantalG <- db_Pitching %>%
+  group_by(G)%>%
+   summarise(observaties = n())
+
+ggplot(aantalG, aes(x=G, y=observaties)) +
+  geom_point(color = "gray30", size=1)
+
+```
+
 
 \begin{thebibliography}{9}
 
