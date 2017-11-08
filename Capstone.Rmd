@@ -126,6 +126,74 @@ names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
 
+Na het importeren hebben wij van onderstaande code gebruik gemaakt om de Primary Keys te kunnen bepalen voor het ERD
+
+```{r welke column is de p key, results="hide"}
+db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
+                 | duplicated(db_AllstarFull[c("playerID","gameID")], fromLast = TRUE)), ]
+db_Appearances[(duplicated(db_Appearances[c("playerID","yearID","teamID")])
+                 | duplicated(db_Appearances[c("playerID","yearID", "teamID")], fromLast = TRUE)), ]
+db_AwardsManagers[(duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")])
+                 | duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")], fromLast = TRUE)),]
+db_AwardsPlayers[(duplicated(db_AwardsPlayers[c("playerID","awardID", "yearID", "lgID")])
+                 | duplicated(db_AwardsPlayers[c("playerID","awardID", "yearID", "lgID")], fromLast = TRUE)),]
+db_AwardsShareManagers[(duplicated(db_AwardsShareManagers[c("playerID", "yearID")])
+                 | duplicated(db_AwardsShareManagers[c("playerID", "yearID")], fromLast = TRUE)), ]
+db_AwardsSharePlayers[(duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")])
+                 | duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")], fromLast = TRUE)),]
+db_Batting[(duplicated(db_Batting[c("playerID", "yearID", "stint")])
+                 | duplicated(db_Batting[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
+db_BattingPost[(duplicated(db_BattingPost[c("playerID", "yearID", "round")])
+                 | duplicated(db_BattingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
+db_CollegePlaying[(duplicated(db_CollegePlaying[c("playerID", "yearID", "schoolID")])
+                 | duplicated(db_CollegePlaying[c("playerID", "yearID", "schoolID")], fromLast = TRUE)),]
+db_Fielding[(duplicated(db_Fielding[c("playerID", "yearID", "stint", "POS")])
+                 | duplicated(db_Fielding[c("playerID", "yearID", "stint", "POS")], fromLast = TRUE)),]
+db_FieldingOF[(duplicated(db_FieldingOF[c("playerID", "yearID", "stint")])
+                 | duplicated(db_FieldingOF[c("playerID", "yearID", "stint")], fromLast = TRUE)),]
+db_FieldingOFsplit[(duplicated(db_FieldingOFsplit[c("playerID", "yearID", "stint", "POS")])
+                 | duplicated(db_FieldingOFsplit[c("playerID", "yearID", "stint", "POS")], fromLast = TRUE)),]
+db_FieldingPost[(duplicated(db_FieldingPost[c("playerID", "yearID", "round", "POS")])
+                 | duplicated(db_FieldingPost[c("playerID", "yearID", "round", "POS")], fromLast = TRUE)),]
+db_HallOfFame[(duplicated(db_HallOfFame[c("playerID", "yearid", "votedBy")])
+                 | duplicated(db_HallOfFame[c("playerID", "yearid", "votedBy")], fromLast = TRUE)),]
+db_HomeGames[(duplicated(db_HomeGames[c("year.key", "team.key", "park.key")])
+                 | duplicated(db_HomeGames[c("year.key", "team.key", "park.key")], fromLast = TRUE)),]
+db_Managers[(duplicated(db_Managers[c("playerID", "yearID", "inseason")])
+                 | duplicated(db_Managers[c("playerID", "yearID", "inseason")], fromLast = TRUE)),]
+db_ManagersHalf[(duplicated(db_ManagersHalf[c("playerID","yearID","half")])
+                 | duplicated(db_ManagersHalf[c("playerID","yearID","half")], fromLast = TRUE)), ]
+db_Master[(duplicated(db_Master["playerID"])
+                 | duplicated(db_Master["playerID"], fromLast = TRUE)), ]
+db_Parks[(duplicated(db_Parks["park.key"])
+                 | duplicated(db_Parks["park.key"], fromLast = TRUE)), ]
+db_Pitching[(duplicated(db_Pitching[c("playerID", "yearID", "stint")])
+                 | duplicated(db_Pitching[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
+db_PitchingPost[(duplicated(db_PitchingPost[c("playerID", "yearID", "round")])
+                 | duplicated(db_PitchingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
+db_Salaries[(duplicated(db_Salaries[c("playerID", "yearID", "teamID")])
+                 | duplicated(db_Salaries[c("playerID", "yearID", "teamID")], fromLast = TRUE)), ]
+db_Schools[(duplicated(db_Salaries["schoolID", ])
+                 | duplicated(db_Salaries["schoolID", ], fromLast = TRUE)), ]
+db_SeriesPost[(duplicated(db_SeriesPost[c("yearID", "round")])
+                 | duplicated(db_SeriesPost[c("yearID", "round")], fromLast = TRUE)), ]
+db_Teams[(duplicated(db_Teams[c("yearID", "teamID")])
+                 | duplicated(db_Teams[c("yearID", "teamID")], fromLast = TRUE)), ]
+db_TeamsFranchises[(duplicated(db_TeamsFranchises[c("franchID")])
+                 | duplicated(db_TeamsFranchises[c("franchID")], fromLast = TRUE)), ]
+db_TeamsHalf[(duplicated(db_TeamsHalf[c("teamID", "Half")])
+                 | duplicated(db_TeamsHalf[c("teamID", "Half")], fromLast = TRUE)), ]
+glimpse(db_AllstarFull)
+
+db_Managers %>%
+  filter(yearID == 1892)
+
+db_ManagersHalf %>%
+  filter(yearID == 1892)
+nrow(db_AwardsManagers)
+```
+
+
 \subsubsection{Data transformeren}
 De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Ons ERD gaf dit ook al aan. Om dit te verifieren voeren wij een 0e functie uit op het Pitching tabel.
 
@@ -150,7 +218,6 @@ glimpse(db_Salaries)
 ```
 
 Aan de hand van deze 0e orde functie resultaten passen wij ook de rest van de incorrete classes aan.
-
 
 ```{r Transforming table classes}
 #db_Pitching
@@ -242,7 +309,28 @@ Bij het Fielding tabel mist er veel meer data. Voor de colommen: ZR, WP, CS, SB 
 
 \subsubsection{Distributie}
 
+We nemen als voorbeeld de kolommen G(Games) en HR(Homeruns) van het Pitching tabel en kijken naar de verdeling. 
 
+```{r verdelingen}
+aantalHR <- db_Pitching %>%
+  group_by(HR)%>%
+   summarise(observaties = n())
+
+ggplot(aantalHR, aes(x=HR, y=observaties)) +
+  geom_point(color = "gray30", size=1) +
+  labs(y= "Aantal observaties", x = "Aantal homeruns per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal homeruns opnieuw geteld" , title = "Het aantal hoeveelheid homeruns worden er door een speler per jaar gemaakt")
+
+aantalG <- db_Pitching %>%
+  group_by(G)%>%
+   summarise(observaties = n())
+
+ggplot(aantalG, aes(x=G, y=observaties)) +
+  geom_point(color = "gray30", size=1) +
+  labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
+
+```
+De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
+De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
 
 
 \subsubsection{Relaties}
@@ -277,96 +365,6 @@ Vervolgens herhalen wij deze functie voor het Pitching tabel
 pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
 ```
 
-Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
-
-```{r welke column is de p key, echo=FALSE, results="hide"}
-db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
-                 | duplicated(db_AllstarFull[c("playerID","gameID")], fromLast = TRUE)), ]
-db_Appearances[(duplicated(db_Appearances[c("playerID","yearID","teamID")])
-                 | duplicated(db_Appearances[c("playerID","yearID", "teamID")], fromLast = TRUE)), ]
-db_AwardsManagers[(duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")])
-                 | duplicated(db_AwardsManagers[c("playerID","awardID", "yearID")], fromLast = TRUE)),]
-db_AwardsPlayers[(duplicated(db_AwardsPlayers[c("playerID","awardID", "yearID", "lgID")])
-                 | duplicated(db_AwardsPlayers[c("playerID","awardID", "yearID", "lgID")], fromLast = TRUE)),]
-db_AwardsShareManagers[(duplicated(db_AwardsShareManagers[c("playerID", "yearID")])
-                 | duplicated(db_AwardsShareManagers[c("playerID", "yearID")], fromLast = TRUE)), ]
-db_AwardsSharePlayers[(duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")])
-                 | duplicated(db_AwardsSharePlayers[c("playerID", "yearID", "awardID")], fromLast = TRUE)),]
-db_Batting[(duplicated(db_Batting[c("playerID", "yearID", "stint")])
-                 | duplicated(db_Batting[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
-db_BattingPost[(duplicated(db_BattingPost[c("playerID", "yearID", "round")])
-                 | duplicated(db_BattingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
-db_CollegePlaying[(duplicated(db_CollegePlaying[c("playerID", "yearID", "schoolID")])
-                 | duplicated(db_CollegePlaying[c("playerID", "yearID", "schoolID")], fromLast = TRUE)),]
-db_Fielding[(duplicated(db_Fielding[c("playerID", "yearID", "stint", "POS")])
-                 | duplicated(db_Fielding[c("playerID", "yearID", "stint", "POS")], fromLast = TRUE)),]
-db_FieldingOF[(duplicated(db_FieldingOF[c("playerID", "yearID", "stint")])
-                 | duplicated(db_FieldingOF[c("playerID", "yearID", "stint")], fromLast = TRUE)),]
-db_FieldingOFsplit[(duplicated(db_FieldingOFsplit[c("playerID", "yearID", "stint", "POS")])
-                 | duplicated(db_FieldingOFsplit[c("playerID", "yearID", "stint", "POS")], fromLast = TRUE)),]
-db_FieldingPost[(duplicated(db_FieldingPost[c("playerID", "yearID", "round", "POS")])
-                 | duplicated(db_FieldingPost[c("playerID", "yearID", "round", "POS")], fromLast = TRUE)),]
-db_HallOfFame[(duplicated(db_HallOfFame[c("playerID", "yearid", "votedBy")])
-                 | duplicated(db_HallOfFame[c("playerID", "yearid", "votedBy")], fromLast = TRUE)),]
-db_HomeGames[(duplicated(db_HomeGames[c("year.key", "team.key", "park.key")])
-                 | duplicated(db_HomeGames[c("year.key", "team.key", "park.key")], fromLast = TRUE)),]
-db_Managers[(duplicated(db_Managers[c("playerID", "yearID", "inseason")])
-                 | duplicated(db_Managers[c("playerID", "yearID", "inseason")], fromLast = TRUE)),]
-db_ManagersHalf[(duplicated(db_ManagersHalf[c("playerID","yearID","half")])
-                 | duplicated(db_ManagersHalf[c("playerID","yearID","half")], fromLast = TRUE)), ]
-db_Master[(duplicated(db_Master["playerID"])
-                 | duplicated(db_Master["playerID"], fromLast = TRUE)), ]
-db_Parks[(duplicated(db_Parks["park.key"])
-                 | duplicated(db_Parks["park.key"], fromLast = TRUE)), ]
-db_Pitching[(duplicated(db_Pitching[c("playerID", "yearID", "stint")])
-                 | duplicated(db_Pitching[c("playerID", "yearID", "stint")], fromLast = TRUE)), ]
-db_PitchingPost[(duplicated(db_PitchingPost[c("playerID", "yearID", "round")])
-                 | duplicated(db_PitchingPost[c("playerID", "yearID", "round")], fromLast = TRUE)), ]
-db_Salaries[(duplicated(db_Salaries[c("playerID", "yearID", "teamID")])
-                 | duplicated(db_Salaries[c("playerID", "yearID", "teamID")], fromLast = TRUE)), ]
-db_Schools[(duplicated(db_Salaries["schoolID", ])
-                 | duplicated(db_Salaries["schoolID", ], fromLast = TRUE)), ]
-db_SeriesPost[(duplicated(db_SeriesPost[c("yearID", "round")])
-                 | duplicated(db_SeriesPost[c("yearID", "round")], fromLast = TRUE)), ]
-db_Teams[(duplicated(db_Teams[c("yearID", "teamID")])
-                 | duplicated(db_Teams[c("yearID", "teamID")], fromLast = TRUE)), ]
-db_TeamsFranchises[(duplicated(db_TeamsFranchises[c("franchID")])
-                 | duplicated(db_TeamsFranchises[c("franchID")], fromLast = TRUE)), ]
-db_TeamsHalf[(duplicated(db_TeamsHalf[c("teamID", "Half")])
-                 | duplicated(db_TeamsHalf[c("teamID", "Half")], fromLast = TRUE)), ]
-glimpse(db_AllstarFull)
-
-db_Managers %>%
-  filter(yearID == 1892)
-
-db_ManagersHalf %>%
-  filter(yearID == 1892)
-nrow(db_AwardsManagers)
-```
-
-de verdelingen
-```{r verdelingen}
-aantalHR <- db_Pitching %>%
-  group_by(HR)%>%
-   summarise(observaties = n())
-
-ggplot(aantalHR, aes(x=HR, y=observaties)) +
-  geom_point(color = "gray30", size=1) +
-  labs(y= "Aantal observaties", x = "Aantal homeruns per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal homeruns opnieuw geteld" , title = "Het aantal hoeveelheid homeruns worden er door een speler per jaar gemaakt")
-
-aantalG <- db_Pitching %>%
-  group_by(G)%>%
-   summarise(observaties = n())
-
-ggplot(aantalG, aes(x=G, y=observaties)) +
-  geom_point(color = "gray30", size=1) +
-  labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
-
-```
-De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
-De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
-<<<<<<< HEAD
-=======
 
 time series:
 ```{r time series}
@@ -375,7 +373,6 @@ filter(teamID == "CIN") %>%
   group_by(playerID)
 ```
 
->>>>>>> d2eedb323cafddda25bd915b926abe1f83888891
 
 \begin{thebibliography}{9}
 
