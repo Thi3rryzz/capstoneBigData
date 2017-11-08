@@ -53,7 +53,7 @@ library(Amelia)
 \section{Capstone Batting}
 \textit{Klaas Berbee \& Thierry Ligeon}
 
-Voor de capstone van de minor Big-Data in urban technology aan de Hogeschool van Amsterdam moeten wij de Batting dataset gaan bestuderen. Als eerste beginnen we met het globaal inzicht krijgen van de dataset.
+Voor de capstone van de minor Big-Data in Urban Technology aan de Hogeschool van Amsterdam moeten wij de Batting dataset gaan bestuderen. Zoals bij elke dataset moet er eerst een globaal beeld geschetst worden.
 
 \subsection{Context van de dataset}
 
