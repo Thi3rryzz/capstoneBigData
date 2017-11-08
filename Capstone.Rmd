@@ -333,9 +333,16 @@ De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere ver
 
 time series:
 ```{r time series}
-timeserie1 <- db_Appearances %>%
-filter(teamID == "CIN") %>%
-  group_by(playerID)
+db_Salariestime <- db_Salaries %>%
+filter(teamID == "BOS") %>%
+  group_by(teamID)
+
+db_Appearancesteam$yearID = strptime(db_Appearancesteam$yearID, "%Y")
+db_Appearancesteam$yearID = as.character(db_Appearancesteam$yearID)
+
+ggplot()+
+  geom_line(data=db_Appearances, aes(yearID, G_all, color=as.factor(Accelerometer)))
+
 ```
 
 
