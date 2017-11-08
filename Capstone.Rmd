@@ -59,7 +59,7 @@ Voor de capstone van de minor Big-Data in Urban Technology aan de Hogeschool van
 
 De Batting dataset bevat data over o.a.: teams, spelers en managers. Ook bevat de dataset informatie over hun salarissen en skills. Verder bevat deze dataset informatie over hoe de individuele wedstrijden verlopen zijn, welke activiteiten hierin zijn voorgekomen en door wie deze zijn uitgevoerd. 
 
-Het doel is om deze dateset om te zetten naar nuttige informatie en dit vervolgens conclusies uit kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen in welke factoren een grote rol spelen in de prestatie van het team.
+Het doel is om deze dateset om te zetten naar nuttige informatie en hier vervolgens conclusies uit te kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen welke factoren een grote rol spelen in de prestaties van het team.
 
 
 \subsubsection{Belanghebbende voor deze dataset}
@@ -81,17 +81,19 @@ Met deze dataset kan de hoeveelheid bezoekers voorspeld worden. Hierop kunnen pr
 \end{description}
 
 \subsubsection{Hoe de dataset tot stand gekomen is}
-Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2012\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn onstaan.
+Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2016\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn onstaan.
 
 \subsubsection{Hedendaagse problemen oplossen m.b.v. deze dataset}
-De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data van afgelopen jaren, en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd. Dit zou eveneens met de uitslagen van 2013 tot en met 2016 gedaan worden. Hieruit kan ook afgeleid worden of het model effectief blijft in de toekomst.
+De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data uit deze dataset (tot en met 2012), en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd. Dit zou eveneens met de uitslagen van 2013 tot en met 2016 gedaan worden. Hieruit kan ook afgeleid worden of het model effectief blijft in de toekomst.
 
 \subsection{Database Theorie}
 \subsubsection{Entity-Relationship Diagram}
-De Batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
+De batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
 Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
-
+?????????????????????
 Door alle tabellen uit de database te bekijken zijn we tot onderstaand ERD gekomen:
+
+
 
 \subsubsection{Datawarehouse}
 
@@ -125,7 +127,7 @@ list2env(allTables, envir = .GlobalEnv)
 \subsubsection{Data transformeren}
 De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Ons ERD gaf dit ook al aan. Om dit te verifieren voeren wij een 0e functie uit op het Pitching tabel.
 
-```{r glimpsing}
+```{r glimpsing,fig.width=12, fig.height=8}
 glimpse(db_Pitching)
 ```
 
@@ -137,7 +139,8 @@ Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Integers,
 \item Teams
 \item Salaries
 \end{itemize}
-```{r Viewing table classes}
+\pagebreak
+```{r Viewing table classes , results="hide"}
 glimpse(db_Batting)
 glimpse(db_Fielding)
 glimpse(db_Teams)
@@ -212,7 +215,7 @@ db_Fielding[db_Fielding == ""] = NA
 db_Teams[db_Teams == ""] = NA
 db_Salaries[db_Salaries == ""] = NA
 ```
-Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen verwerken in dezelfde R-Studio omgeving.
+Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen analyseren in dezelfde R-Studio omgeving.
 
 \subsection{Data Exploreren}
 
@@ -223,19 +226,18 @@ Als voorbeeld nemen wij het tabel Pitching.
 summary(db_Pitching)
 ```
 
-Vervolgens kijken wij naar de ontbrekende data met behulp van een missing map.
+Vervolgens kijken wij van de Pitching en Fielding tabellen naar de ontbrekende data met behulp van een missing map.
 ```{r Create missingmap from Pitching}
 missmap(db_Pitching, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Pitching")
 
-missmap(db_Batting, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Batting")
-
 missmap(db_Fielding, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Fielding")
 
-missmap(db_Teams, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Teams")
-
-missmap(db_Salaries, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Salaries")
 
 ```
+Uit de missing map van het pitching tabel valt op te maken dat de kolommen: GIDP, SF, SH en IBB aanzienlijk minder datapunten bevatten. Deze kolommen bevatten eerst compleet geen data, en na een bepaalde tijd wel. Dit zou betekenen dat deze data pas gelogd wert vanaf een bepaalde datum. Bij het tabel BAOpp is dit echter anders. Hier ontbreekt redelijk wat data echter niet structureel. Ik zou niet kunnen verklaren waarom deze datapunten missen.
+
+Bij het Fielding tabel mist er veel meer data. Voor de colommen: ZR, WP, CS, SB en PB mist er erg onrgelematig data. Bij InnOuts is dit iets consistenter maar zit er ook nogsteeds een apart gat. De missende waarden voor WP, CS, SB en PB zijn wel te verklaren. Deze variabelen gelden alleen voor Catchers, en aangezien het Fielding tabel spelers bevat voor alle posities zou het kunnnen kloppen dat deze waarden alleen bekend zijn voor de catchers. de ZR (Zone Rating) kolom zou echter wel voor elke speler bekend moeten zijn, en niet voor enkele catchers. De aparte missende data bij InnsOuts heb ik echter ook geen verdere verklaring voor.
+
 
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
 
