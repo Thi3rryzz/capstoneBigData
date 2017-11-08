@@ -365,6 +365,17 @@ ggplot(aantalG, aes(x=G, y=observaties)) +
 ```
 De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
 De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
+<<<<<<< HEAD
+=======
+
+time series:
+```{r time series}
+timeserie1 <- db_Appearances %>%
+filter(teamID == "CIN") %>%
+  group_by(playerID)
+```
+
+>>>>>>> d2eedb323cafddda25bd915b926abe1f83888891
 
 \begin{thebibliography}{9}
 
