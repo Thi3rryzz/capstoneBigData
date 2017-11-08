@@ -205,7 +205,7 @@ db_Salaries$lgID = as.factor(db_Salaries$lgID)
 ```
 
 De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
-```{r Define N/A's}
+```{r Define NA}
 db_Pitching[db_Pitching == ""] = NA
 db_Batting[db_Batting == ""] = NA
 db_Fielding[db_Fielding == ""] = NA
@@ -225,7 +225,16 @@ summary(db_Pitching)
 
 Vervolgens kijken wij naar de ontbrekende data met behulp van een missing map.
 ```{r Create missingmap from Pitching}
-missmap(db_Pitching, col=c("black", "grey"), legend=FALSE)
+missmap(db_Pitching, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Pitching")
+
+missmap(db_Batting, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Batting")
+
+missmap(db_Fielding, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Fielding")
+
+missmap(db_Teams, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Teams")
+
+missmap(db_Salaries, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Salaries")
+
 ```
 
 Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
