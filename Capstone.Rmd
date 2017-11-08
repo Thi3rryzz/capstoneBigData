@@ -29,7 +29,7 @@ library(ggplot2)
 	\includegraphics[width=0.15\textwidth]{intro}\par\vspace{1cm}
 	{\scshape\LARGE Hogeschool van Amsterdam \par}
 	\vspace{1cm}
-	{\scshape\Large Capstone Big-Data in urban technology\par}
+	{\scshape\Large Capstone Big-Data in Urban Technology\par}
 	\vspace{1.5cm}
 	{\huge\bfseries Batting\par}
 	\vspace{2cm}
@@ -59,9 +59,9 @@ Voor de capstone van de minor Big-Data in Urban Technology aan de Hogeschool van
 
 \subsection{Context van de dataset}
 
-De Batting dataset bevat data over o.a.: teams, spelers en managers. Ook bevat de dataset informatie over hun salarissen en skills. Verder bevat deze dataset informatie over hoe de individuele wedstrijden verlopen zijn, welke activiteiten hierin zijn voorgekomen en door wie deze zijn uitgevoerd. 
+De Batting dataset bevat data over o.a.: teams, spelers en managers. Ook bevat de dataset informatie over hun salarissen en vaardigheden. Verder bevat deze dataset informatie over hoe de individuele wedstrijden verlopen zijn, welke activiteiten hierin zijn voorgekomen en door wie deze zijn uitgevoerd. 
 
-Het doel is om deze dateset om te zetten naar nuttige informatie en hier vervolgens conclusies uit te kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen welke factoren een grote rol spelen in de prestaties van het team.
+Het doel is om deze dataset om te zetten naar nuttige informatie en hier vervolgens conclusies uit te kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen welke factoren een grote rol spelen in de prestaties van het team.
 
 
 \subsubsection{Belanghebbende voor deze dataset}
@@ -72,7 +72,7 @@ Het doel is om deze dateset om te zetten naar nuttige informatie en hier vervolg
 Er kan een voordeel voor kansspelspelers ontstaan zodra zij bezitten over voorspelmodellen voor komende wedstrijden.
 
 \item[Teamcoaches] \hfill \\
-De coach kan uit de dataset de sterke en zwakke punten van de spelers inzien. Hierop kan hij zijn trainingen specificeren op bepaalde aspecten voor zijn spelers. Daarnaast kunnen de sterke en zwakke punten van de competitie bekeken worden om zo beter voor te kunnen bereiden oo aankomende wedstrijden.
+De coach kan uit de dataset de sterke en zwakke punten van de spelers inzien. Hierop kan hij zijn trainingen specificeren op bepaalde aspecten voor zijn spelers. Daarnaast kunnen de sterke en zwakke punten van de competitie bekeken worden om zo beter voor te kunnen bereiden op aankomende wedstrijden.
 
 \item[Junior spelers] \hfill \\
 Beginnende spelers kunnen hun idolen en vaardigheden vergelijken en bekijken bij welke club zij getraind hebben. Dit zou een aanleiding kunnen zijn om een club te kiezen
@@ -83,7 +83,7 @@ Met deze dataset kan de hoeveelheid bezoekers voorspeld worden. Hierop kunnen pr
 \end{description}
 
 \subsubsection{Hoe de dataset tot stand gekomen is}
-Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2016\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn onstaan.
+Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2016\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn ontstaan.
 
 \subsubsection{Hedendaagse problemen oplossen m.b.v. deze dataset}
 De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data uit deze dataset (tot en met 2012), en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd. Dit zou eveneens met de uitslagen van 2013 tot en met 2016 gedaan worden. Hieruit kan ook afgeleid worden of het model effectief blijft in de toekomst.
@@ -92,10 +92,13 @@ De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston A
 \subsubsection{Entity-Relationship Diagram}
 De batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
 Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
-?????????????????????
+\begin{itemize}
+\item De begindatum van de variabelen is bij veel tabellen verschillend, bij het joinen van de ERD gaat sommige data hierdoor verloren.
+\item Het overzicht na het mergen van deze ERD gaat verloren.
+\end{itemize}
+
 Door alle tabellen uit de database te bekijken zijn we tot onderstaand ERD gekomen:
-	- De eene dataset gaat langer terug dan de ander, bij het joinen van de ERD gaat dan sommige data verloren.
-  - Het overzicht na het mergen van deze ERD is direct weg
+
 
 \subsubsection{Datawarehouse}
 
@@ -126,7 +129,7 @@ names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
 
-Na het importeren hebben wij van onderstaande code gebruik gemaakt om de Primary Keys te kunnen bepalen voor het ERD
+Na het importeren hebben wij van onderstaande code gebruik gemaakt om de primary keys te kunnen bepalen voor het ERD
 
 ```{r welke column is de p key, results="hide"}
 db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
@@ -195,7 +198,7 @@ nrow(db_AwardsManagers)
 
 
 \subsubsection{Data transformeren}
-De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Ons ERD gaf dit ook al aan. Om dit te verifieren voeren wij een 0e functie uit op het Pitching tabel.
+De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Ons ERD gaf dit ook al aan. Om dit te verifiëren voeren wij een 0e functie uit op het Pitching tabel.
 
 ```{r glimpsing,fig.width=12, fig.height=8}
 glimpse(db_Pitching)
@@ -217,7 +220,7 @@ glimpse(db_Teams)
 glimpse(db_Salaries)
 ```
 
-Aan de hand van deze 0e orde functie resultaten passen wij ook de rest van de incorrete classes aan.
+Aan de hand van deze 0e orde functie resultaten passen wij ook de rest van de incorrecte classes aan.
 
 ```{r Transforming table classes}
 #db_Pitching
@@ -288,7 +291,7 @@ Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data
 
 \subsection{Data Exploreren}
 \subsubsection{Missende Data}
-Om te beginnen met het data exploratie proces moeten wij een tabel gebruiken dat verschillende klassen variabele bevat. Hier moeten we voervolgens de summary functie op uit voeren (1e orde functie).
+Om te beginnen met het data exploratie proces moeten wij een tabel gebruiken dat verschillende klassen variabele bevat. Hier moeten we vervolgens de summary functie op uit voeren (1e orde functie).
 Als voorbeeld nemen wij het tabel Pitching.
 
 ```{r Summary on table}
@@ -303,9 +306,9 @@ missmap(db_Fielding, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=F
 
 
 ```
-Uit de missing map van het pitching tabel valt op te maken dat de kolommen: GIDP, SF, SH en IBB aanzienlijk minder datapunten bevatten. Deze kolommen bevatten eerst compleet geen data, en na een bepaalde tijd wel. Dit zou betekenen dat deze data pas gelogd wert vanaf een bepaalde datum. Bij het tabel BAOpp is dit echter anders. Hier ontbreekt redelijk wat data echter niet structureel. Ik zou niet kunnen verklaren waarom deze datapunten missen.
+Uit de missing map van het Pitching tabel valt op te maken dat de kolommen: GIDP, SF, SH en IBB aanzienlijk minder datapunten bevatten. Deze kolommen bevatten eerst compleet geen data, en na een bepaalde tijd wel. Dit zou betekenen dat deze data pas opgeslagen werd vanaf een bepaalde datum. Bij het tabel BAOpp is dit echter anders. Hier ontbreekt redelijk wat data echter niet structureel. Ik zou niet kunnen verklaren waarom deze datapunten missen.
 
-Bij het Fielding tabel mist er veel meer data. Voor de colommen: ZR, WP, CS, SB en PB mist er erg onrgelematig data. Bij InnOuts is dit iets consistenter maar zit er ook nogsteeds een apart gat. De missende waarden voor WP, CS, SB en PB zijn wel te verklaren. Deze variabelen gelden alleen voor Catchers, en aangezien het Fielding tabel spelers bevat voor alle posities zou het kunnnen kloppen dat deze waarden alleen bekend zijn voor de catchers. de ZR (Zone Rating) kolom zou echter wel voor elke speler bekend moeten zijn, en niet voor enkele catchers. De aparte missende data bij InnsOuts heb ik echter ook geen verdere verklaring voor.
+Bij het Fielding tabel mist er veel meer data. Voor de kolommen: ZR, WP, CS, SB en PB mist er erg onregelmatig data. Bij InnOuts is dit iets consistenter maar zit er ook nog steeds een apart gat. De missende waarden voor WP, CS, SB en PB zijn wel te verklaren. Deze variabelen gelden alleen voor Catchers, en aangezien het Fielding tabel spelers bevat voor alle posities zou het kunnen kloppen dat deze waarden alleen bekend zijn voor de catchers. de ZR (Zone Rating) kolom zou echter wel voor elke speler bekend moeten zijn, en niet voor enkele catchers. De aparte missende data bij InnsOuts heb ik echter ook geen verdere verklaring voor.
 
 \subsubsection{Distributie}
 
@@ -329,8 +332,8 @@ ggplot(aantalG, aes(x=G, y=observaties)) +
   labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
 
 ```
-De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
-De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
+De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentieel voorspelmodel betrouwbaar omdat de plot exponentieel is.
+De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentieel voorspelmodel onbetrouwbaar omdat de plot niet exponentieel is.
 
 
 \subsubsection{Relaties}
@@ -358,12 +361,19 @@ panel.cor <- function(x, y, digits=2, prefix="", cex.cor)
 
 pairs(db_Batting[,c(6:13)],main="Pairs Batting Set",lower.panel=panel.smooth, upper.panel=panel.cor)
 ```
-Uit de bovenstaande pairsresultaten valt op te maken dat er tussen de gekozen variabelen niet grote verbanden liggen. De grootste correlatie is tussen AB(At Bats) en H(Hits). 
+Uit de bovenstaande pairs resultaten valt op te maken dat er tussen de gekozen variabelen niet grote verbanden liggen. De grootste correlatie is tussen AB(At Bats) en H(Hits). 
 
 Vervolgens herhalen wij deze functie voor het Pitching tabel
 ```{r pairs2}
 pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
 ```
+Wat er op valt aan het resultaat van de pairs functie over de Pitching set is dat IPouts een relatief grote correlatie met meerdere variabelen. Daarnaast is het apart dat er geen grote correlatie is tussen de hoeveelheid games, en games started of completed games. Bij deze laatste is de lijn zelfs plat.
+
+
+
+\subsection{Data managen}
+
+
 
 
 time series:
