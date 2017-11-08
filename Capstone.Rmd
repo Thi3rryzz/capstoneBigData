@@ -90,6 +90,7 @@ De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston A
 \subsubsection{Entity-Relationship Diagram}
 De Batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
 Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
+- De eene dataset gaat langer terug dan de ander, bij het joinen van de ERD gaat dan sommige data verloren.
 
 Door alle tabellen uit de database te bekijken zijn we tot onderstaand ERD gekomen:
 
