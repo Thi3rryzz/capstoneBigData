@@ -337,11 +337,11 @@ db_Salariestime <- db_Salaries %>%
 filter(teamID == "BOS") %>%
   group_by(teamID)
 
-db_Appearancesteam$yearID = strptime(db_Appearancesteam$yearID, "%Y")
-db_Appearancesteam$yearID = as.character(db_Appearancesteam$yearID)
+db_Salariestime$yearID = strptime(db_Salariestime$yearID, "%Y")
+db_Salariestime$yearID = as.character(db_Salariestime$yearID)
 
 ggplot()+
-  geom_line(data=db_Appearances, aes(yearID, G_all, color=as.factor(Accelerometer)))
+  geom_line(data=db_Appearances, aes(yearID, G_all, color=as.factor(playerID)))
 
 ```
 
