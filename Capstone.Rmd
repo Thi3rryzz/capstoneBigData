@@ -309,6 +309,7 @@ db_ManagersHalf %>%
 nrow(db_AwardsManagers)
 ```
 
+de verdelingen
 ```{r verdelingen}
 aantalHR <- db_Pitching %>%
   group_by(HR)%>%
@@ -316,16 +317,20 @@ aantalHR <- db_Pitching %>%
 
 ggplot(aantalHR, aes(x=HR, y=observaties)) +
   geom_point(color = "gray30", size=1) +
-  labs(y= "Aantal observaties", x = "Aantal homeruns per speler per jaar \n note: wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal homeruns opnieuw geteld" , title = "Het aantal hoeveelheid homeruns worden er door een speler per jaar gemaakt")
+  labs(y= "Aantal observaties", x = "Aantal homeruns per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal homeruns opnieuw geteld" , title = "Het aantal hoeveelheid homeruns worden er door een speler per jaar gemaakt")
 
 aantalG <- db_Pitching %>%
   group_by(G)%>%
    summarise(observaties = n())
 
 ggplot(aantalG, aes(x=G, y=observaties)) +
-  geom_point(color = "gray30", size=1)
+  geom_point(color = "gray30", size=1) +
+  labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
 
 ```
+De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
+De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
+
 
 
 \begin{thebibliography}{9}
