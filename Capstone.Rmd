@@ -302,6 +302,7 @@ De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit loss
 db_Pitching[db_Pitching == ""] = NA
 db_Batting[db_Batting == ""] = NA
 db_Fielding[db_Fielding == ""] = NA
+db_Master[db_Master == ""] = NA
 db_Teams[db_Teams == ""] = NA
 db_Salaries[db_Salaries == ""] = NA
 ```
@@ -365,8 +366,8 @@ db_Salariestime$yearID = as.character(db_Salariestime$yearID)
 
 ggplot()+
   geom_line(data=db_Appearances, aes(yearID, G_all, color=as.factor(playerID)))
+```
 
-=======
 De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentieel voorspelmodel betrouwbaar omdat de plot exponentieel is.
 De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentieel voorspelmodel onbetrouwbaar omdat de plot niet exponentieel is.
 
@@ -401,7 +402,6 @@ Uit de bovenstaande pairs resultaten valt op te maken dat er tussen de gekozen v
 Vervolgens herhalen wij deze functie voor het Pitching tabel
 ```{r pairs2}
 pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
->>>>>>> 4b679f5d378e40ef63dbfc9e93910e996cb0120e
 ```
 Wat er op valt aan het resultaat van de pairs functie over de Pitching set is dat IPouts een relatief grote correlatie met meerdere variabelen. Daarnaast is het apart dat er geen grote correlatie is tussen de hoeveelheid games, en games started of completed games. Bij deze laatste is de lijn zelfs plat.
 
@@ -431,6 +431,29 @@ Vervolgens kijken wij naar het salaris van de top 5 spelers volgens een externe 
 ```{r timeseries 2}
 db_Salaries %>% filter(playerID == "ba")
 
+```
+
+```{r top salaris}
+db_Salariesx <- db_Salaries %>%
+  group_by(playerID) %>%
+  add_count(playerID) %>%
+  filter(n >= 5) %>%
+  filter(yearID == min(yearID) | salary == max(salary))
+
+db_Salariesy <- db_Salariesx %>%
+  summarise(jaarmaxsalaris = max(yearID) - min(yearID))
+
+db_Salariesxy <- db_Salaries %>%
+  group_by(playerID) %>%
+   add_count(playerID) %>%
+  filter(n >= 5) %>%
+  filter(yearID == min(yearID) | yearID == max(yearID)) %>%
+  summarise(spelendaantaljaar = max(yearID) - min(yearID))
+  
+aantaljrmaxsalaris <- merge(db_Salariesy, db_Salariesxy, by = "playerID") %>%
+transform(percentage = (jaarmaxsalaris / spelendaantaljaar) * 100)
+
+percarmaxsal <- mean(aantaljrmaxsalaris$percentage)
 ```
 
 \begin{thebibliography}{9}
