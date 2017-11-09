@@ -372,14 +372,30 @@ Wat er op valt aan het resultaat van de pairs functie over de Pitching set is da
 \subsection{Data Managen}
 Er zijn verschillende manieren om data te cleanen/cleansen. Kijkend naar de missing maps komt het vaak voor dat er in de vroegere jaren(1871-1955) datapunten ontbreken. Deze zouden ge-extrapoleerd kunnen worden met behulp van modellen. Echter hebben wij besloten om dit niet uit te voeren vanwege tijdsgebrek en met de dataset in deze staat te werken.
 
+Wel moet de datum aangepast om aan de slag te kunnen met timeseries. We hebben besloten om 1 januari aan elke datum toe te voegen in verband met de class.
+```{r year to date}
 
+db_Salaries$yearID = as.Date(paste0(db_Salaries$yearID, '-01-01'))
 
-time series:
-```{r time series}
-timeserie1 <- db_Appearances %>%
-filter(teamID == "CIN") %>%
-  group_by(playerID)
 ```
+\subsubsection{Transformeren tot timeseries}
+We beginnen met het timeseries plotten van de totale salarissen van de teams. Volgens de NBA regels hoort een team uit 25 actieve spelers te bestaan\cite{minplayeramount}. Dit hebben wij ook als voorwarde meegenomen in het eerste plot. Echter is deze regel pas ingevoerd in 1914. Er zal dus wat data verloren. De hoeveelheid extra spelers die ook betaald worden dat een team bevat hebben wij hier even buiten beschouwing gelaten. Het doel is om een globaal inzicht te krijgen welke teams veel investeren in hun spelers. Wij verwachten dat er enkele uitschieters zullen zijn, Dit mede ook vanwege de hoeveelheid spelers, maar ook vanwege de meerprijs van \textit{betere} spelers.
+```{r Timeseries 1}
+db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25) %>% ggplot(.,aes(x=yearID, y=total, group=teamID)) + geom_line(aes(color=teamID)) + ggtitle("Total team salary per year") + xlab("Year") + ylab("Total Salary in USD")
+
+```
+
+Wat hier opvalt is dat de totale salarisuitgave van alle teams(ongeacht de hoeveelheid spelers) tot 1990 relatief dicht bij elkaar lag. Dit is in de loop van de jaren erg uit elkaar gaan lopen. Ook zijn er teams die extreem veel meer uitgeven aan hun spelers. Deze zullen wij nader onderzoeken.
+
+```{r Timeseries 1.1}
+topTeams = db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25 & total >= 200000000) %>% pull(teamID) %>% unique()
+
+db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(teamID %in% topTeams) %>% ggplot(.,aes(x=yearID, y=total, group=teamID)) + geom_point(aes(color=teamID)) + geom_line(aes(color=teamID)) + ggtitle("Total team salary per year once exceeded 200M USD") + xlab("Year") + ylab("Total Salary in USD") 
+
+```
+Hierboven staan de teams die ooit totaal meer dan 200 miljoen USD uitgegeven heeft aan hun spelers. Er is alleen maar salaris data van de LAD(Los Angeles Dodgers) en NYY(New York Yankees) bekend in 2016. Dit is erg vreemd en hebben wij geen directe verklaring voor aangezien de naamswijzijgingen van de teams niet in 2016 zijn gebeurd.
+
+
 
 
 \begin{thebibliography}{9}
@@ -391,4 +407,8 @@ Sean Lahman, Batting database explanation 2012,
 \bibitem{houstonastros}
 AD: Houston Astros verslaan Los Angeles Dodgers, 2017,
 \\\texttt{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}
+
+\bibitem{minplayeramount}
+Baseball Amanac: Baseball Rosters
+\\\texttt{http://www.baseball-almanac.com/articles/baseball_rosters.shtml}
 \end{thebibliography}
