@@ -357,6 +357,23 @@ ggplot(aantalG, aes(x=G, y=observaties)) +
   labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
 
 ```
+<<<<<<< HEAD
+De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
+De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
+
+time series:
+```{r time series}
+db_Salariestime <- db_Salaries %>%
+filter(teamID == "BOS") %>%
+  group_by(teamID)
+
+db_Salariestime$yearID = strptime(db_Salariestime$yearID, "%Y")
+db_Salariestime$yearID = as.character(db_Salariestime$yearID)
+
+ggplot()+
+  geom_line(data=db_Appearances, aes(yearID, G_all, color=as.factor(playerID)))
+```
+
 De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentieel voorspelmodel betrouwbaar omdat de plot exponentieel is.
 De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentieel voorspelmodel onbetrouwbaar omdat de plot niet exponentieel is.
 
@@ -427,6 +444,29 @@ En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. 
 TBD
 ```{r timeseries 3}
 db_Teams %>% arrange(desc(W/G))
+```
+
+```{r top salaris}
+db_Salariesx <- db_Salaries %>%
+  group_by(playerID) %>%
+  add_count(playerID) %>%
+  filter(n >= 5) %>%
+  filter(yearID == min(yearID) | salary == max(salary))
+
+db_Salariesy <- db_Salariesx %>%
+  summarise(jaarmaxsalaris = max(yearID) - min(yearID))
+
+db_Salariesxy <- db_Salaries %>%
+  group_by(playerID) %>%
+   add_count(playerID) %>%
+  filter(n >= 5) %>%
+  filter(yearID == min(yearID) | yearID == max(yearID)) %>%
+  summarise(spelendaantaljaar = max(yearID) - min(yearID))
+  
+aantaljrmaxsalaris <- merge(db_Salariesy, db_Salariesxy, by = "playerID") %>%
+transform(percentage = (jaarmaxsalaris / spelendaantaljaar) * 100)
+
+percarmaxsal <- mean(aantaljrmaxsalaris$percentage)
 ```
 
 \begin{thebibliography}{9}
