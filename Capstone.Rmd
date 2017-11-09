@@ -375,22 +375,16 @@ panel.cor <- function(x, y, digits=2, prefix="", cex.cor)
     if(missing(cex.cor)) cex <- 0.8/strwidth(txt) 
  
     test <- cor.test(x,y) 
-    # borrowed from printCoefmat
-    Signif <- symnum(test$p.value, corr = FALSE, na = FALSE, 
-                  cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
-                  symbols = c("***", "**", "*", ".", " ")) 
- 
-    text(0.5, 0.5, txt, cex = cex * r) 
-    text(.8, .8, Signif, cex=cex, col=2) 
+    text(0.5, 0.5, txt, cex = cex * r)
 }
 
-pairs(db_Batting[,c(6:13)],main="Pairs Batting Set",lower.panel=panel.smooth, upper.panel=panel.cor)
+#pairs(db_Batting[,c(6:13)],main="Pairs Batting Set",lower.panel=panel.smooth, upper.panel=panel.cor)
 ```
 Uit de bovenstaande pairs resultaten valt op te maken dat er tussen de gekozen variabelen niet grote verbanden liggen. De grootste correlatie is tussen AB(At Bats) en H(Hits). 
 
 Vervolgens herhalen wij deze functie voor het Pitching tabel
 ```{r pairs2}
-pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
+#pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
 ```
 Wat er op valt aan het resultaat van de pairs functie over de Pitching set is dat IPouts een relatief grote correlatie met meerdere variabelen. Daarnaast is het apart dat er geen grote correlatie is tussen de hoeveelheid games, en games started of completed games. Bij deze laatste is de lijn zelfs plat.
 
@@ -427,9 +421,13 @@ Zoals te zien is komen er meerere entries voor voor de top 5 spelers. Wel kan me
 top5Players = c("aaronha1","aikenwi01","cobbty01","ruthba01","willite01")
 db_Salaries %>% filter(playerID %in% top5Players)
 ```
-En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. Hier houd dus dit spoor op. Dit waarschijnlijk eerder naarboven zijn gekomen als wij besloten hadden om alle tabellen te mergen. Toch hebben we besloten dit niet te doen vanwege de mogelijke onoverzichtelijkheden.
+En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. Hier houd dus dit spoor op. Ook hebben we besloten om dit toch te documenteren aangezien dit soort conclusies namelijk ook bij Big-Data naar voren komen. Dit zou waarschijnlijk eerder naarboven zijn gekomen als wij besloten hadden om alle tabellen te mergen. Toch hebben we besloten dit niet te doen vanwege de mogelijke onoverzichtelijkheden.
 
 
+TBD
+```{r timeseries 3}
+db_Teams %>% arrange(desc(W/G))
+```
 
 \begin{thebibliography}{9}
 
@@ -443,7 +441,7 @@ AD: Houston Astros verslaan Los Angeles Dodgers, 2017,
 
 \bibitem{minplayeramount}
 Baseball Amanac: Baseball Rosters
-\\\texttt{http://www.baseball-almanac.com/articles/baseball_rosters.shtml}
+\\\texttt{http://www.baseball-almanac.com/articles/baseball_rosters.html/}
 
 \bibitem{top5}
 The Top Tens: Baseball Players
