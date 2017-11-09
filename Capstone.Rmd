@@ -209,6 +209,7 @@ Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Integers,
 \item Pitching
 \item Batting
 \item Fielding
+\item Master
 \item Teams
 \item Salaries
 \end{itemize}
@@ -216,6 +217,7 @@ Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Integers,
 ```{r Viewing table classes , results="hide"}
 glimpse(db_Batting)
 glimpse(db_Fielding)
+glimpse(db_Master)
 glimpse(db_Teams)
 glimpse(db_Salaries)
 ```
@@ -257,6 +259,18 @@ db_Fielding$SB = as.integer(db_Fielding$SB)
 db_Fielding$CS = as.integer(db_Fielding$CS)
 db_Fielding$ZR = as.integer(db_Fielding$ZR)
 
+db_Master$birthCountry = as.factor(db_Master$birthCountry)
+db_Master$birthState = as.factor(db_Master$birthState)
+db_Master$deathYear = as.integer(db_Master$deathYear)
+db_Master$deathMonth = as.integer(db_Master$deathMonth)
+db_Master$deathDay = as.integer(db_Master$deathDay)
+db_Master$deathCountry = as.factor(db_Master$deathCountry)
+db_Master$deathState = as.factor(db_Master$deathState)
+db_Master$bats = as.factor(db_Master$bats)
+db_Master$throws = as.factor(db_Master$throws)
+#db_Master$debut = as.Date(db_Master$debut, format="%Y-%m-%d")
+#db_Master$finalGame = as.Date(db_Master$finalGame, format="%Y-%m-%d")
+
 db_Teams$teamID = as.factor(db_Teams$teamID)
 db_Teams$lgID = as.factor(db_Teams$lgID)
 db_Teams$franchID = as.factor(db_Teams$franchID)
@@ -278,12 +292,17 @@ db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
 db_Salaries$teamID = as.factor(db_Salaries$teamID)
 db_Salaries$lgID = as.factor(db_Salaries$lgID)
 ```
-
+Na het correct indelen van de classes van elke variabelen kan in het Master tabel de geboorte en overlijdens datum nog beter ingedeeld worden. Dit bereiken wij door de onderstaande code.
+```{r Dates fixing}
+db_Master$birthDate = as.Date(as.character(paste(db_Master$birthYear,db_Master$birthMonth,db_Master$birthDay,sep = "-")),format = "%Y-%m-%d")
+db_Master$deathDate = as.Date(as.character(paste(db_Master$deathYear,db_Master$deathMonth,db_Master$deathDay,sep = "-")),format = "%Y-%m-%d")
+```
 De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
 ```{r Define NA}
 db_Pitching[db_Pitching == ""] = NA
 db_Batting[db_Batting == ""] = NA
 db_Fielding[db_Fielding == ""] = NA
+db_Master[db_Master == ""] = NA
 db_Teams[db_Teams == ""] = NA
 db_Salaries[db_Salaries == ""] = NA
 ```
@@ -374,15 +393,12 @@ Er zijn verschillende manieren om data te cleanen/cleansen. Kijkend naar de miss
 
 Wel moet de datum aangepast om aan de slag te kunnen met timeseries. We hebben besloten om 1 januari aan elke datum toe te voegen in verband met de class.
 ```{r year to date}
-
 db_Salaries$yearID = as.Date(paste0(db_Salaries$yearID, '-01-01'))
-
 ```
 \subsubsection{Transformeren tot timeseries}
 We beginnen met het timeseries plotten van de totale salarissen van de teams. Volgens de NBA regels hoort een team uit 25 actieve spelers te bestaan\cite{minplayeramount}. Dit hebben wij ook als voorwarde meegenomen in het eerste plot. Echter is deze regel pas ingevoerd in 1914. Er zal dus wat data verloren. De hoeveelheid extra spelers die ook betaald worden dat een team bevat hebben wij hier even buiten beschouwing gelaten. Het doel is om een globaal inzicht te krijgen welke teams veel investeren in hun spelers. Wij verwachten dat er enkele uitschieters zullen zijn, Dit mede ook vanwege de hoeveelheid spelers, maar ook vanwege de meerprijs van \textit{betere} spelers.
 ```{r Timeseries 1}
 db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25) %>% ggplot(.,aes(x=yearID, y=total, group=teamID)) + geom_line(aes(color=teamID)) + ggtitle("Total team salary per year") + xlab("Year") + ylab("Total Salary in USD")
-
 ```
 
 Wat hier opvalt is dat de totale salarisuitgave van alle teams(ongeacht de hoeveelheid spelers) tot 1990 relatief dicht bij elkaar lag. Dit is in de loop van de jaren erg uit elkaar gaan lopen. Ook zijn er teams die extreem veel meer uitgeven aan hun spelers. Deze zullen wij nader onderzoeken.
@@ -391,12 +407,14 @@ Wat hier opvalt is dat de totale salarisuitgave van alle teams(ongeacht de hoeve
 topTeams = db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25 & total >= 200000000) %>% pull(teamID) %>% unique()
 
 db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(teamID %in% topTeams) %>% ggplot(.,aes(x=yearID, y=total, group=teamID)) + geom_point(aes(color=teamID)) + geom_line(aes(color=teamID)) + ggtitle("Total team salary per year once exceeded 200M USD") + xlab("Year") + ylab("Total Salary in USD") 
-
 ```
 Hierboven staan de teams die ooit totaal meer dan 200 miljoen USD uitgegeven heeft aan hun spelers. Er is alleen maar salaris data van de LAD(Los Angeles Dodgers) en NYY(New York Yankees) bekend in 2016. Dit is erg vreemd en hebben wij geen directe verklaring voor aangezien de naamswijzijgingen van de teams niet in 2016 zijn gebeurd.
 
+Vervolgens kijken wij naar het salaris van de top 5 spelers volgens een externe bron. Dit betekend niet dat zij de beste spelers zijn statistisch gezien. Maar dit geeft ons wel een referentiepunt.
+```{r timeseries 2}
+db_Salaries %>% filter(playerID == "ba")
 
-
+```
 
 \begin{thebibliography}{9}
 
