@@ -18,10 +18,12 @@ if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
 if (!require("Amelia")) install.packages("Amelia")
 if (!require("ggplot2")) install.packages("ggplot2")
+if (!require("lubridate")) install.packages("lubridate")
 library(dplyr)
 library(RMySQL)
 library(Amelia)
 library(ggplot2)
+library(lubridate)
 ```
 
 \begin{titlepage}
@@ -268,8 +270,6 @@ db_Master$deathCountry = as.factor(db_Master$deathCountry)
 db_Master$deathState = as.factor(db_Master$deathState)
 db_Master$bats = as.factor(db_Master$bats)
 db_Master$throws = as.factor(db_Master$throws)
-#db_Master$debut = as.Date(db_Master$debut, format="%Y-%m-%d")
-#db_Master$finalGame = as.Date(db_Master$finalGame, format="%Y-%m-%d")
 
 db_Teams$teamID = as.factor(db_Teams$teamID)
 db_Teams$lgID = as.factor(db_Teams$lgID)
@@ -292,11 +292,6 @@ db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
 db_Salaries$teamID = as.factor(db_Salaries$teamID)
 db_Salaries$lgID = as.factor(db_Salaries$lgID)
 ```
-Na het correct indelen van de classes van elke variabelen kan in het Master tabel de geboorte en overlijdens datum nog beter ingedeeld worden. Dit bereiken wij door de onderstaande code.
-```{r Dates fixing}
-db_Master$birthDate = as.Date(as.character(paste(db_Master$birthYear,db_Master$birthMonth,db_Master$birthDay,sep = "-")),format = "%Y-%m-%d")
-db_Master$deathDate = as.Date(as.character(paste(db_Master$deathYear,db_Master$deathMonth,db_Master$deathDay,sep = "-")),format = "%Y-%m-%d")
-```
 De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
 ```{r Define NA}
 db_Pitching[db_Pitching == ""] = NA
@@ -306,6 +301,15 @@ db_Master[db_Master == ""] = NA
 db_Teams[db_Teams == ""] = NA
 db_Salaries[db_Salaries == ""] = NA
 ```
+
+Na het correct indelen van de classes van elke variabelen en het correct beschouwen van de NA's kan in het Master tabel sommige datums beter ingedeeld worden. Dit bereiken wij door de onderstaande code.
+```{r Dates fixing}
+db_Master$birthDate = ymd(paste(db_Master$birthYear,db_Master$birthMonth,db_Master$birthDay,sep = "-"))
+db_Master$deathDate = ymd(paste(db_Master$deathYear,db_Master$deathMonth,db_Master$deathDay,sep = "-"))
+db_Master$debut = as.Date(db_Master$debut, format="%Y-%m-%d")
+db_Master$finalGame = as.Date(db_Master$finalGame, format="%Y-%m-%d")
+```
+
 Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen analyseren in dezelfde R-Studio omgeving.
 
 \subsection{Data Exploreren}
