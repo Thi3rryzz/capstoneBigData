@@ -18,10 +18,12 @@ if (!require("dplyr")) install.packages("dplyr")
 if (!require("RMySQL")) install.packages("RMySQL")
 if (!require("Amelia")) install.packages("Amelia")
 if (!require("ggplot2")) install.packages("ggplot2")
+if (!require("lubridate")) install.packages("lubridate")
 library(dplyr)
 library(RMySQL)
 library(Amelia)
 library(ggplot2)
+library(lubridate)
 ```
 
 \begin{titlepage}
@@ -224,7 +226,7 @@ glimpse(db_Salaries)
 
 Aan de hand van deze 0e orde functie resultaten passen wij ook de rest van de incorrecte classes aan.
 
-```{r Transforming table classes}
+```{r Transforming table classes, results="hide"}
 #db_Pitching
 
 db_Pitching$teamID = as.factor(db_Pitching$teamID)
@@ -268,8 +270,6 @@ db_Master$deathCountry = as.factor(db_Master$deathCountry)
 db_Master$deathState = as.factor(db_Master$deathState)
 db_Master$bats = as.factor(db_Master$bats)
 db_Master$throws = as.factor(db_Master$throws)
-#db_Master$debut = as.Date(db_Master$debut, format="%Y-%m-%d")
-#db_Master$finalGame = as.Date(db_Master$finalGame, format="%Y-%m-%d")
 
 db_Teams$teamID = as.factor(db_Teams$teamID)
 db_Teams$lgID = as.factor(db_Teams$lgID)
@@ -292,11 +292,6 @@ db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
 db_Salaries$teamID = as.factor(db_Salaries$teamID)
 db_Salaries$lgID = as.factor(db_Salaries$lgID)
 ```
-Na het correct indelen van de classes van elke variabelen kan in het Master tabel de geboorte en overlijdens datum nog beter ingedeeld worden. Dit bereiken wij door de onderstaande code.
-```{r Dates fixing}
-db_Master$birthDate = as.Date(as.character(paste(db_Master$birthYear,db_Master$birthMonth,db_Master$birthDay,sep = "-")),format = "%Y-%m-%d")
-db_Master$deathDate = as.Date(as.character(paste(db_Master$deathYear,db_Master$deathMonth,db_Master$deathDay,sep = "-")),format = "%Y-%m-%d")
-```
 De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
 ```{r Define NA}
 db_Pitching[db_Pitching == ""] = NA
@@ -306,6 +301,17 @@ db_Master[db_Master == ""] = NA
 db_Teams[db_Teams == ""] = NA
 db_Salaries[db_Salaries == ""] = NA
 ```
+
+Na het correct indelen van de classes van elke variabelen en het correct beschouwen van de NA's kan in het Master tabel sommige datums beter ingedeeld worden. Dit bereiken wij door de onderstaande code.
+```{r Dates fixing}
+db_Master$birthDate = ymd(paste(db_Master$birthYear,db_Master$birthMonth,db_Master$birthDay,sep = "-"))
+db_Master$deathDate = ymd(paste(db_Master$deathYear,db_Master$deathMonth,db_Master$deathDay,sep = "-"))
+db_Master$debut = as.Date(db_Master$debut, format="%Y-%m-%d")
+db_Master$finalGame = as.Date(db_Master$finalGame, format="%Y-%m-%d")
+```
+
+Hierna zouden wij de kolomnamen kunnen aanpassen. Echter hebben wij besloten om dit niet te doen en het tabel van Sean Lahman ernaast te houden\cite{seanlahman}. Dit vanwege in ons opzicht de snellere workflow en overzichtelijkere code.
+
 Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen analyseren in dezelfde R-Studio omgeving.
 
 \subsection{Data Exploreren}
@@ -427,11 +433,20 @@ db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), tota
 ```
 Hierboven staan de teams die ooit totaal meer dan 200 miljoen USD uitgegeven heeft aan hun spelers. Er is alleen maar salaris data van de LAD(Los Angeles Dodgers) en NYY(New York Yankees) bekend in 2016. Dit is erg vreemd en hebben wij geen directe verklaring voor aangezien de naamswijzijgingen van de teams niet in 2016 zijn gebeurd.
 
-Vervolgens kijken wij naar het salaris van de top 5 spelers volgens een externe bron. Dit betekend niet dat zij de beste spelers zijn statistisch gezien. Maar dit geeft ons wel een referentiepunt.
+Vervolgens kijken wij naar het salaris van de top 5 spelers volgens een externe bron\cite
+{top5}. Dit betekend niet dat zij de beste spelers zijn statistisch gezien. Maar dit geeft ons wel een referentiepunt. Eerst zullen we hun playerID moeten achterhalen.
 ```{r timeseries 2}
-db_Salaries %>% filter(playerID == "ba")
-
+db_Master %>% filter(grepl('George Herman|Willie Mays|Henry Louis|Theodore Samuel|Tyrus Raymond', nameGiven)) %>% select(playerID, nameFirst, nameLast, nameGiven)
 ```
+Zoals te zien is komen er meerere entries voor voor de top 5 spelers. Wel kan met combinatie voor/achternaam het juiste playerID gevonden worden.
+
+```{r timeseries 2.1}
+top5Players = c("aaronha1","aikenwi01","cobbty01","ruthba01","willite01")
+db_Salaries %>% filter(playerID %in% top5Players)
+```
+En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. Hier houd dus dit spoor op. Dit waarschijnlijk eerder naarboven zijn gekomen als wij besloten hadden om alle tabellen te mergen. Toch hebben we besloten dit niet te doen vanwege de mogelijke onoverzichtelijkheden.
+
+
 
 ```{r top salaris}
 db_Salariesx <- db_Salaries %>%
@@ -469,4 +484,8 @@ AD: Houston Astros verslaan Los Angeles Dodgers, 2017,
 \bibitem{minplayeramount}
 Baseball Amanac: Baseball Rosters
 \\\texttt{http://www.baseball-almanac.com/articles/baseball_rosters.shtml}
+
+\bibitem{top5}
+The Top Tens: Baseball Players
+\texttt{https://www.thetoptens.com/baseball-players/}
 \end{thebibliography}
