@@ -29,7 +29,7 @@ library(ggplot2)
 	\includegraphics[width=0.15\textwidth]{intro}\par\vspace{1cm}
 	{\scshape\LARGE Hogeschool van Amsterdam \par}
 	\vspace{1cm}
-	{\scshape\Large Capstone Big-Data in urban technology\par}
+	{\scshape\Large Capstone Big-Data in Urban Technology\par}
 	\vspace{1.5cm}
 	{\huge\bfseries Batting\par}
 	\vspace{2cm}
@@ -59,9 +59,9 @@ Voor de capstone van de minor Big-Data in Urban Technology aan de Hogeschool van
 
 \subsection{Context van de dataset}
 
-De Batting dataset bevat data over o.a.: teams, spelers en managers. Ook bevat de dataset informatie over hun salarissen en skills. Verder bevat deze dataset informatie over hoe de individuele wedstrijden verlopen zijn, welke activiteiten hierin zijn voorgekomen en door wie deze zijn uitgevoerd. 
+De Batting dataset bevat data over o.a.: teams, spelers en managers. Ook bevat de dataset informatie over hun salarissen en vaardigheden. Verder bevat deze dataset informatie over hoe de individuele wedstrijden verlopen zijn, welke activiteiten hierin zijn voorgekomen en door wie deze zijn uitgevoerd. 
 
-Het doel is om deze dateset om te zetten naar nuttige informatie en dit vervolgens conclusies uit kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen in welke factoren een grote rol spelen in de prestatie van het team.
+Het doel is om deze dataset om te zetten naar nuttige informatie en hier vervolgens conclusies uit te kunnen trekken. Teams kunnen bijvoorbeeld een inzicht krijgen welke factoren een grote rol spelen in de prestaties van het team.
 
 
 \subsubsection{Belanghebbende voor deze dataset}
@@ -72,7 +72,7 @@ Het doel is om deze dateset om te zetten naar nuttige informatie en dit vervolge
 Er kan een voordeel voor kansspelspelers ontstaan zodra zij bezitten over voorspelmodellen voor komende wedstrijden.
 
 \item[Teamcoaches] \hfill \\
-De coach kan uit de dataset de sterke en zwakke punten van de spelers inzien. Hierop kan hij zijn trainingen specificeren op bepaalde aspecten voor zijn spelers. Daarnaast kunnen de sterke en zwakke punten van de competitie bekeken worden om zo beter voor te kunnen bereiden oo aankomende wedstrijden.
+De coach kan uit de dataset de sterke en zwakke punten van de spelers inzien. Hierop kan hij zijn trainingen specificeren op bepaalde aspecten voor zijn spelers. Daarnaast kunnen de sterke en zwakke punten van de competitie bekeken worden om zo beter voor te kunnen bereiden op aankomende wedstrijden.
 
 \item[Junior spelers] \hfill \\
 Beginnende spelers kunnen hun idolen en vaardigheden vergelijken en bekijken bij welke club zij getraind hebben. Dit zou een aanleiding kunnen zijn om een club te kiezen
@@ -83,20 +83,22 @@ Met deze dataset kan de hoeveelheid bezoekers voorspeld worden. Hierop kunnen pr
 \end{description}
 
 \subsubsection{Hoe de dataset tot stand gekomen is}
-Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2012\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn onstaan.
+Deze dataset is initieel opgezet door Sean Lahman in 1994. De dataset bevat data van 1871 tot 2016\cite{seanlahman}. Echter is deze dataset enkele keren herschreven naar een nieuw format. Daarnaast hebben ook meerdere mensen bijgedragen aan deze dataset. Hierdoor zouden er mogelijke imperfecties in de dataset kunnen zijn ontstaan.
 
 \subsubsection{Hedendaagse problemen oplossen m.b.v. deze dataset}
-De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data van afgelopen jaren, en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd. Dit zou eveneens met de uitslagen van 2013 tot en met 2016 gedaan worden. Hieruit kan ook afgeleid worden of het model effectief blijft in de toekomst.
+De World Series MLB 2017 is in november afgesloten en gewonnen door de Houston Astros\cite{houstonastros}.  Er zouden modellen gemaakt kunnen worden op basis van de data uit deze dataset (tot en met 2012), en vergeleken kunnen worden met de uitslag van 2017. Hierop kan een deel van de prestatie van het model worden gebaseerd. Dit zou eveneens met de uitslagen van 2013 tot en met 2016 gedaan worden. Hieruit kan ook afgeleid worden of het model effectief blijft in de toekomst.
 
 \subsection{Database Theorie}
 \subsubsection{Entity-Relationship Diagram}
-De Batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
+De batting dataset bestaat uit een relationele database. Hieruit kan een ERD worden opgesteld.
 Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
-- De eene dataset gaat langer terug dan de ander, bij het joinen van de ERD gaat dan sommige data verloren.
-- Het overzicht na het mergen van deze ERD is direct weg.
--
+\begin{itemize}
+\item De begindatum van de variabelen is bij veel tabellen verschillend, bij het joinen van de ERD gaat sommige data hierdoor verloren.
+\item Het overzicht na het mergen van deze ERD gaat verloren.
+\end{itemize}
 
 Door alle tabellen uit de database te bekijken zijn we tot onderstaand ERD gekomen:
+
 
 \subsubsection{Datawarehouse}
 
@@ -127,124 +129,9 @@ names(allTables) <- paste("db", dbTables, sep = "_")
 list2env(allTables, envir = .GlobalEnv)
 ```
 
-\subsubsection{Data transformeren}
-De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Ons ERD gaf dit ook al aan. Om dit te verifieren voeren wij een 0e functie uit op het Pitching tabel.
+Na het importeren hebben wij van onderstaande code gebruik gemaakt om de primary keys te kunnen bepalen voor het ERD
 
-```{r glimpsing}
-glimpse(db_Pitching)
-```
-
-Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Integers, Doubles en Characters. Echter is de class van teamID en lgID nog incorrect, dit zouden een factoren moeten zijn. Daarnaast zijn ook enkele Integer kolommen opgevat als Characters. Dit betekend dat dit in meerdere tabellen een probleem kan zijn. Kijkend naar de vragen in de opdrachtbeschrijving hebben we besloten om vanaf nu gebruik te maken van de volgende tabellen:
-\begin{itemize}
-\item Pitching
-\item Batting
-\item Fielding
-\item Teams
-\item Salaries
-\end{itemize}
-```{r Viewing table classes}
-glimpse(db_Batting)
-glimpse(db_Fielding)
-glimpse(db_Teams)
-glimpse(db_Salaries)
-```
-
-Aan de hand van deze 0e orde functie resultaten passen wij ook de rest van de incorrete classes aan.
-
-
-```{r Transforming table classes}
-#db_Pitching
-
-db_Pitching$teamID = as.factor(db_Pitching$teamID)
-db_Pitching$lgID = as.factor(db_Pitching$lgID)
-db_Pitching$BAOpp = as.double(db_Pitching$BAOpp)
-db_Pitching$IBB = as.integer(db_Pitching$IBB)
-db_Pitching$WP = as.integer(db_Pitching$WP)
-db_Pitching$HBP = as.integer(db_Pitching$HBP)
-db_Pitching$BFP = as.integer(db_Pitching$BFP)
-db_Pitching$GF = as.integer(db_Pitching$GF)
-db_Pitching$SH = as.integer(db_Pitching$SH)
-db_Pitching$SF = as.integer(db_Pitching$SF)
-db_Pitching$GIDP = as.integer(db_Pitching$GIDP)
-
-#db_Batting
-db_Batting$teamID = as.factor(db_Batting$teamID)
-db_Batting$lgID = as.factor(db_Batting$lgID)
-db_Batting$IBB = as.integer(db_Batting$IBB)
-db_Batting$HBP = as.integer(db_Batting$HBP)
-db_Batting$SH = as.integer(db_Batting$SH)
-db_Batting$SF = as.integer(db_Batting$SF)
-db_Batting$GIDP = as.integer(db_Batting$GIDP)
-
-db_Fielding$teamID = as.factor(db_Fielding$teamID)
-db_Fielding$lgID = as.factor(db_Fielding$lgID)
-db_Fielding$POS = as.factor(db_Fielding$POS)
-db_Fielding$GS = as.integer(db_Fielding$GS)
-db_Fielding$InnOuts = as.integer(db_Fielding$InnOuts)
-db_Fielding$PB = as.integer(db_Fielding$PB)
-db_Fielding$WP = as.integer(db_Fielding$WP)
-db_Fielding$SB = as.integer(db_Fielding$SB)
-db_Fielding$CS = as.integer(db_Fielding$CS)
-db_Fielding$ZR = as.integer(db_Fielding$ZR)
-
-db_Teams$teamID = as.factor(db_Teams$teamID)
-db_Teams$lgID = as.factor(db_Teams$lgID)
-db_Teams$franchID = as.factor(db_Teams$franchID)
-db_Teams$divID = as.factor(db_Teams$divID)
-db_Teams$Ghome = as.integer(db_Teams$Ghome)
-db_Teams$DivWin = as.factor(db_Teams$DivWin)
-db_Teams$WCWin = as.factor(db_Teams$WCWin)
-db_Teams$LgWin = as.factor(db_Teams$LgWin)
-db_Teams$WSWin = as.factor(db_Teams$WSWin)
-db_Teams$CS = as.integer(db_Teams$CS)
-db_Teams$HBP = as.integer(db_Teams$HBP)
-db_Teams$SF = as.integer(db_Teams$SF)
-db_Teams$DP = as.integer(db_Teams$DP)
-db_Teams$attendance = as.integer(db_Teams$attendance)
-db_Teams$teamIDBR = as.factor(db_Teams$teamIDBR)
-db_Teams$teamIDlahman45 = as.factor(db_Teams$teamIDlahman45)
-db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
-
-db_Salaries$teamID = as.factor(db_Salaries$teamID)
-db_Salaries$lgID = as.factor(db_Salaries$lgID)
-```
-
-De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
-```{r Define NA}
-db_Pitching[db_Pitching == ""] = NA
-db_Batting[db_Batting == ""] = NA
-db_Fielding[db_Fielding == ""] = NA
-db_Teams[db_Teams == ""] = NA
-db_Salaries[db_Salaries == ""] = NA
-```
-Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen verwerken in dezelfde R-Studio omgeving.
-
-\subsection{Data Exploreren}
-
-Om te beginnen met het data exploratie proces moeten wij een tabel gebruiken dat verschillende klassen variabele bevat. Hier moeten we voervolgens de summary functie op uit voeren (1e orde functie).
-Als voorbeeld nemen wij het tabel Pitching.
-
-```{r Summary on table}
-summary(db_Pitching)
-```
-
-Vervolgens kijken wij naar de ontbrekende data met behulp van een missing map.
-```{r Create missingmap from Pitching}
-missmap(db_Pitching, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Pitching")
-
-missmap(db_Batting, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Batting")
-
-missmap(db_Fielding, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Fielding")
-
-missmap(db_Teams, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Teams")
-
-missmap(db_Salaries, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Salaries")
-
-```
-
-Doormiddel van de onderstaande code kan er uitgezocht worden wat de Primary Keys zijn.
-
-```{r welke column is de p key, echo=FALSE, results="hide"}
+```{r welke column is de p key, results="hide"}
 db_AllstarFull[(duplicated(db_AllstarFull[c("playerID","gameID")])
                  | duplicated(db_AllstarFull[c("playerID","gameID")], fromLast = TRUE)), ]
 db_Appearances[(duplicated(db_Appearances[c("playerID","yearID","teamID")])
@@ -309,7 +196,142 @@ db_ManagersHalf %>%
 nrow(db_AwardsManagers)
 ```
 
-de verdelingen
+
+\subsubsection{Data transformeren}
+De opdracht meende dat sommige tabellen variabelen bevatte met het verkeerde type. Ons ERD gaf dit ook al aan. Om dit te verifiëren voeren wij een 0e functie uit op het Pitching tabel.
+
+```{r glimpsing,fig.width=12, fig.height=8}
+glimpse(db_Pitching)
+```
+
+Zoals hierboven staat, bevat dit tabel zowel variabelen van de classes Integers, Doubles en Characters. Echter is de class van teamID en lgID nog incorrect, dit zouden een factoren moeten zijn. Daarnaast zijn ook enkele Integer kolommen opgevat als Characters. Dit betekend dat dit in meerdere tabellen een probleem kan zijn. Kijkend naar de vragen in de opdrachtbeschrijving hebben we besloten om vanaf nu gebruik te maken van de volgende tabellen:
+\begin{itemize}
+\item Pitching
+\item Batting
+\item Fielding
+\item Master
+\item Teams
+\item Salaries
+\end{itemize}
+\pagebreak
+```{r Viewing table classes , results="hide"}
+glimpse(db_Batting)
+glimpse(db_Fielding)
+glimpse(db_Master)
+glimpse(db_Teams)
+glimpse(db_Salaries)
+```
+
+Aan de hand van deze 0e orde functie resultaten passen wij ook de rest van de incorrecte classes aan.
+
+```{r Transforming table classes}
+#db_Pitching
+
+db_Pitching$teamID = as.factor(db_Pitching$teamID)
+db_Pitching$lgID = as.factor(db_Pitching$lgID)
+db_Pitching$BAOpp = as.double(db_Pitching$BAOpp)
+db_Pitching$IBB = as.integer(db_Pitching$IBB)
+db_Pitching$WP = as.integer(db_Pitching$WP)
+db_Pitching$HBP = as.integer(db_Pitching$HBP)
+db_Pitching$BFP = as.integer(db_Pitching$BFP)
+db_Pitching$GF = as.integer(db_Pitching$GF)
+db_Pitching$SH = as.integer(db_Pitching$SH)
+db_Pitching$SF = as.integer(db_Pitching$SF)
+db_Pitching$GIDP = as.integer(db_Pitching$GIDP)
+
+#db_Batting
+db_Batting$teamID = as.factor(db_Batting$teamID)
+db_Batting$lgID = as.factor(db_Batting$lgID)
+db_Batting$IBB = as.integer(db_Batting$IBB)
+db_Batting$HBP = as.integer(db_Batting$HBP)
+db_Batting$SH = as.integer(db_Batting$SH)
+db_Batting$SF = as.integer(db_Batting$SF)
+db_Batting$GIDP = as.integer(db_Batting$GIDP)
+
+db_Fielding$teamID = as.factor(db_Fielding$teamID)
+db_Fielding$lgID = as.factor(db_Fielding$lgID)
+db_Fielding$POS = as.factor(db_Fielding$POS)
+db_Fielding$GS = as.integer(db_Fielding$GS)
+db_Fielding$InnOuts = as.integer(db_Fielding$InnOuts)
+db_Fielding$PB = as.integer(db_Fielding$PB)
+db_Fielding$WP = as.integer(db_Fielding$WP)
+db_Fielding$SB = as.integer(db_Fielding$SB)
+db_Fielding$CS = as.integer(db_Fielding$CS)
+db_Fielding$ZR = as.integer(db_Fielding$ZR)
+
+db_Master$birthCountry = as.factor(db_Master$birthCountry)
+db_Master$birthState = as.factor(db_Master$birthState)
+db_Master$deathYear = as.integer(db_Master$deathYear)
+db_Master$deathMonth = as.integer(db_Master$deathMonth)
+db_Master$deathDay = as.integer(db_Master$deathDay)
+db_Master$deathCountry = as.factor(db_Master$deathCountry)
+db_Master$deathState = as.factor(db_Master$deathState)
+db_Master$bats = as.factor(db_Master$bats)
+db_Master$throws = as.factor(db_Master$throws)
+#db_Master$debut = as.Date(db_Master$debut, format="%Y-%m-%d")
+#db_Master$finalGame = as.Date(db_Master$finalGame, format="%Y-%m-%d")
+
+db_Teams$teamID = as.factor(db_Teams$teamID)
+db_Teams$lgID = as.factor(db_Teams$lgID)
+db_Teams$franchID = as.factor(db_Teams$franchID)
+db_Teams$divID = as.factor(db_Teams$divID)
+db_Teams$Ghome = as.integer(db_Teams$Ghome)
+db_Teams$DivWin = as.factor(db_Teams$DivWin)
+db_Teams$WCWin = as.factor(db_Teams$WCWin)
+db_Teams$LgWin = as.factor(db_Teams$LgWin)
+db_Teams$WSWin = as.factor(db_Teams$WSWin)
+db_Teams$CS = as.integer(db_Teams$CS)
+db_Teams$HBP = as.integer(db_Teams$HBP)
+db_Teams$SF = as.integer(db_Teams$SF)
+db_Teams$DP = as.integer(db_Teams$DP)
+db_Teams$attendance = as.integer(db_Teams$attendance)
+db_Teams$teamIDBR = as.factor(db_Teams$teamIDBR)
+db_Teams$teamIDlahman45 = as.factor(db_Teams$teamIDlahman45)
+db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
+
+db_Salaries$teamID = as.factor(db_Salaries$teamID)
+db_Salaries$lgID = as.factor(db_Salaries$lgID)
+```
+Na het correct indelen van de classes van elke variabelen kan in het Master tabel de geboorte en overlijdens datum nog beter ingedeeld worden. Dit bereiken wij door de onderstaande code.
+```{r Dates fixing}
+db_Master$birthDate = as.Date(as.character(paste(db_Master$birthYear,db_Master$birthMonth,db_Master$birthDay,sep = "-")),format = "%Y-%m-%d")
+db_Master$deathDate = as.Date(as.character(paste(db_Master$deathYear,db_Master$deathMonth,db_Master$deathDay,sep = "-")),format = "%Y-%m-%d")
+```
+De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit lossen we op door de hieronderstaande code.
+```{r Define NA}
+db_Pitching[db_Pitching == ""] = NA
+db_Batting[db_Batting == ""] = NA
+db_Fielding[db_Fielding == ""] = NA
+db_Teams[db_Teams == ""] = NA
+db_Salaries[db_Salaries == ""] = NA
+```
+Het loading proces hoeven wij vervolgens niet meer te doen aangezien wij de data zullen analyseren in dezelfde R-Studio omgeving.
+
+\subsection{Data Exploreren}
+\subsubsection{Missende Data}
+Om te beginnen met het data exploratie proces moeten wij een tabel gebruiken dat verschillende klassen variabele bevat. Hier moeten we vervolgens de summary functie op uit voeren (1e orde functie).
+Als voorbeeld nemen wij het tabel Pitching.
+
+```{r Summary on table}
+summary(db_Pitching)
+```
+
+Vervolgens kijken wij van de Pitching en Fielding tabellen naar de ontbrekende data met behulp van een missing map.
+```{r Create missingmap from Pitching}
+missmap(db_Pitching, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Pitching")
+
+missmap(db_Fielding, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Fielding")
+
+
+```
+Uit de missing map van het Pitching tabel valt op te maken dat de kolommen: GIDP, SF, SH en IBB aanzienlijk minder datapunten bevatten. Deze kolommen bevatten eerst compleet geen data, en na een bepaalde tijd wel. Dit zou betekenen dat deze data pas opgeslagen werd vanaf een bepaalde datum. Bij het tabel BAOpp is dit echter anders. Hier ontbreekt redelijk wat data echter niet structureel. Ik zou niet kunnen verklaren waarom deze datapunten missen.
+
+Bij het Fielding tabel mist er veel meer data. Voor de kolommen: ZR, WP, CS, SB en PB mist er erg onregelmatig data. Bij InnOuts is dit iets consistenter maar zit er ook nog steeds een apart gat. De missende waarden voor WP, CS, SB en PB zijn wel te verklaren. Deze variabelen gelden alleen voor Catchers, en aangezien het Fielding tabel spelers bevat voor alle posities zou het kunnen kloppen dat deze waarden alleen bekend zijn voor de catchers. de ZR (Zone Rating) kolom zou echter wel voor elke speler bekend moeten zijn, en niet voor enkele catchers. De aparte missende data bij InnsOuts heb ik echter ook geen verdere verklaring voor.
+
+\subsubsection{Distributie}
+
+We nemen als voorbeeld de kolommen G(Games) en HR(Homeruns) van het Pitching tabel en kijken naar de verdeling. 
+
 ```{r verdelingen}
 aantalHR <- db_Pitching %>%
   group_by(HR)%>%
@@ -328,6 +350,7 @@ ggplot(aantalG, aes(x=G, y=observaties)) +
   labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
 
 ```
+<<<<<<< HEAD
 De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
 De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
 
@@ -343,8 +366,72 @@ db_Salariestime$yearID = as.character(db_Salariestime$yearID)
 ggplot()+
   geom_line(data=db_Appearances, aes(yearID, G_all, color=as.factor(playerID)))
 
+=======
+De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentieel voorspelmodel betrouwbaar omdat de plot exponentieel is.
+De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentieel voorspelmodel onbetrouwbaar omdat de plot niet exponentieel is.
+
+
+\subsubsection{Relaties}
+De laatste stap van de data exploratie is het bekijken van mogelijke correlaties tussen verschillende variabelen. Dit kan erg gemakkelijk met behulp van de pairs functie.
+
+```{r Pairs}
+panel.cor <- function(x, y, digits=2, prefix="", cex.cor) 
+{
+    usr <- par("usr"); on.exit(par(usr)) 
+    par(usr = c(0, 1, 0, 1)) 
+    r <- abs(cor(x, y)) 
+    txt <- format(c(r, 0.123456789), digits=digits)[1] 
+    txt <- paste(prefix, txt, sep="") 
+    if(missing(cex.cor)) cex <- 0.8/strwidth(txt) 
+ 
+    test <- cor.test(x,y) 
+    # borrowed from printCoefmat
+    Signif <- symnum(test$p.value, corr = FALSE, na = FALSE, 
+                  cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
+                  symbols = c("***", "**", "*", ".", " ")) 
+ 
+    text(0.5, 0.5, txt, cex = cex * r) 
+    text(.8, .8, Signif, cex=cex, col=2) 
+}
+
+pairs(db_Batting[,c(6:13)],main="Pairs Batting Set",lower.panel=panel.smooth, upper.panel=panel.cor)
+```
+Uit de bovenstaande pairs resultaten valt op te maken dat er tussen de gekozen variabelen niet grote verbanden liggen. De grootste correlatie is tussen AB(At Bats) en H(Hits). 
+
+Vervolgens herhalen wij deze functie voor het Pitching tabel
+```{r pairs2}
+pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
+>>>>>>> 4b679f5d378e40ef63dbfc9e93910e996cb0120e
+```
+Wat er op valt aan het resultaat van de pairs functie over de Pitching set is dat IPouts een relatief grote correlatie met meerdere variabelen. Daarnaast is het apart dat er geen grote correlatie is tussen de hoeveelheid games, en games started of completed games. Bij deze laatste is de lijn zelfs plat.
+
+\subsection{Data Managen}
+Er zijn verschillende manieren om data te cleanen/cleansen. Kijkend naar de missing maps komt het vaak voor dat er in de vroegere jaren(1871-1955) datapunten ontbreken. Deze zouden ge-extrapoleerd kunnen worden met behulp van modellen. Echter hebben wij besloten om dit niet uit te voeren vanwege tijdsgebrek en met de dataset in deze staat te werken.
+
+Wel moet de datum aangepast om aan de slag te kunnen met timeseries. We hebben besloten om 1 januari aan elke datum toe te voegen in verband met de class.
+```{r year to date}
+db_Salaries$yearID = as.Date(paste0(db_Salaries$yearID, '-01-01'))
+```
+\subsubsection{Transformeren tot timeseries}
+We beginnen met het timeseries plotten van de totale salarissen van de teams. Volgens de NBA regels hoort een team uit 25 actieve spelers te bestaan\cite{minplayeramount}. Dit hebben wij ook als voorwarde meegenomen in het eerste plot. Echter is deze regel pas ingevoerd in 1914. Er zal dus wat data verloren. De hoeveelheid extra spelers die ook betaald worden dat een team bevat hebben wij hier even buiten beschouwing gelaten. Het doel is om een globaal inzicht te krijgen welke teams veel investeren in hun spelers. Wij verwachten dat er enkele uitschieters zullen zijn, Dit mede ook vanwege de hoeveelheid spelers, maar ook vanwege de meerprijs van \textit{betere} spelers.
+```{r Timeseries 1}
+db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25) %>% ggplot(.,aes(x=yearID, y=total, group=teamID)) + geom_line(aes(color=teamID)) + ggtitle("Total team salary per year") + xlab("Year") + ylab("Total Salary in USD")
 ```
 
+Wat hier opvalt is dat de totale salarisuitgave van alle teams(ongeacht de hoeveelheid spelers) tot 1990 relatief dicht bij elkaar lag. Dit is in de loop van de jaren erg uit elkaar gaan lopen. Ook zijn er teams die extreem veel meer uitgeven aan hun spelers. Deze zullen wij nader onderzoeken.
+
+```{r Timeseries 1.1}
+topTeams = db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25 & total >= 200000000) %>% pull(teamID) %>% unique()
+
+db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(teamID %in% topTeams) %>% ggplot(.,aes(x=yearID, y=total, group=teamID)) + geom_point(aes(color=teamID)) + geom_line(aes(color=teamID)) + ggtitle("Total team salary per year once exceeded 200M USD") + xlab("Year") + ylab("Total Salary in USD") 
+```
+Hierboven staan de teams die ooit totaal meer dan 200 miljoen USD uitgegeven heeft aan hun spelers. Er is alleen maar salaris data van de LAD(Los Angeles Dodgers) en NYY(New York Yankees) bekend in 2016. Dit is erg vreemd en hebben wij geen directe verklaring voor aangezien de naamswijzijgingen van de teams niet in 2016 zijn gebeurd.
+
+Vervolgens kijken wij naar het salaris van de top 5 spelers volgens een externe bron. Dit betekend niet dat zij de beste spelers zijn statistisch gezien. Maar dit geeft ons wel een referentiepunt.
+```{r timeseries 2}
+db_Salaries %>% filter(playerID == "ba")
+
+```
 
 \begin{thebibliography}{9}
 
@@ -355,4 +442,8 @@ Sean Lahman, Batting database explanation 2012,
 \bibitem{houstonastros}
 AD: Houston Astros verslaan Los Angeles Dodgers, 2017,
 \\\texttt{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}
+
+\bibitem{minplayeramount}
+Baseball Amanac: Baseball Rosters
+\\\texttt{http://www.baseball-almanac.com/articles/baseball_rosters.shtml}
 \end{thebibliography}
