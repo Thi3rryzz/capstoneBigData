@@ -369,10 +369,8 @@ pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, mai
 ```
 Wat er op valt aan het resultaat van de pairs functie over de Pitching set is dat IPouts een relatief grote correlatie met meerdere variabelen. Daarnaast is het apart dat er geen grote correlatie is tussen de hoeveelheid games, en games started of completed games. Bij deze laatste is de lijn zelfs plat.
 
-
-
-\subsection{Data managen}
-
+\subsection{Data Managen}
+Er zijn verschillende manieren om data te cleanen/cleansen. Kijkend naar de missing maps komt het vaak voor dat er in de vroegere jaren(1871-1955) datapunten ontbreken. Deze zouden ge-extrapoleerd kunnen worden met behulp van modellen. Echter hebben wij besloten om dit niet uit te voeren vanwege tijdsgebrek en met de dataset in deze staat te werken.
 
 
 
