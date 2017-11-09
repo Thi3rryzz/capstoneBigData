@@ -381,7 +381,7 @@ De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere ver
 \subsubsection{Relaties}
 De laatste stap van de data exploratie is het bekijken van mogelijke correlaties tussen verschillende variabelen. Dit kan erg gemakkelijk met behulp van de pairs functie.
 
-```{r Pairs}
+```{r Pairs, eval=FALSE, include=FALSE}
 panel.cor <- function(x, y, digits=2, prefix="", cex.cor) 
 {
     usr <- par("usr"); on.exit(par(usr)) 
@@ -395,13 +395,13 @@ panel.cor <- function(x, y, digits=2, prefix="", cex.cor)
     text(0.5, 0.5, txt, cex = cex * r)
 }
 
-#pairs(db_Batting[,c(6:13)],main="Pairs Batting Set",lower.panel=panel.smooth, upper.panel=panel.cor)
+pairs(db_Batting[,c(6:13)],main="Pairs Batting Set",lower.panel=panel.smooth, upper.panel=panel.cor)
 ```
 Uit de bovenstaande pairs resultaten valt op te maken dat er tussen de gekozen variabelen niet grote verbanden liggen. De grootste correlatie is tussen AB(At Bats) en H(Hits). 
 
 Vervolgens herhalen wij deze functie voor het Pitching tabel
-```{r pairs2}
-#pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
+```{r pairs2, eval=FALSE, include=FALSE}
+pairs(db_Pitching[,c(6:13)],lower.panel=panel.smooth, upper.panel=panel.cor, main="Pairs Pitching Set")
 ```
 Wat er op valt aan het resultaat van de pairs functie over de Pitching set is dat IPouts een relatief grote correlatie met meerdere variabelen. Daarnaast is het apart dat er geen grote correlatie is tussen de hoeveelheid games, en games started of completed games. Bij deze laatste is de lijn zelfs plat.
 
@@ -442,11 +442,11 @@ En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. 
 
 
 TBD
-```{r timeseries 3}
+```{r timeseries 3, eval=FALSE, include=FALSE}
 db_Teams %>% arrange(desc(W/G))
 ```
 
-```{r top salaris}
+```{r top salaris, eval=FALSE, include=FALSE}
 db_Salariesx <- db_Salaries %>%
   group_by(playerID) %>%
   add_count(playerID) %>%
@@ -475,15 +475,5 @@ percarmaxsal <- mean(aantaljrmaxsalaris$percentage)
 Sean Lahman, Batting database explanation 2012,
 \\\texttt{http://seanlahman.com/files/database/readme2012.txt}
 
-\bibitem{houstonastros}
-AD: Houston Astros verslaan Los Angeles Dodgers, 2017,
-\\\texttt{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}
 
-\bibitem{minplayeramount}
-Baseball Amanac: Baseball Rosters
-\\\texttt{http://www.baseball-almanac.com/articles/baseball_rosters.html/}
-
-\bibitem{top5}
-The Top Tens: Baseball Players
-\texttt{https://www.thetoptens.com/baseball-players/}
 \end{thebibliography}
