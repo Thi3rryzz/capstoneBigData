@@ -20,12 +20,14 @@ if (!require("Amelia")) install.packages("Amelia")
 if (!require("ggplot2")) install.packages("ggplot2")
 if (!require("lubridate")) install.packages("lubridate")
 if (!require("gridExtra")) install.packages("gridExtra")
+if (!require("Lahman")) install.packages("Lahman")
 library(dplyr)
 library(RMySQL)
 library(Amelia)
 library(ggplot2)
 library(lubridate)
 library(gridExtra)
+library(Lahman)
 ```
 
 \begin{titlepage}
@@ -547,7 +549,18 @@ transform(percentage = (jaarmaxsalaris / spelendaantaljaar) * 100)
 percarmaxsalmed <- median(aantaljrmaxsalaris$percentage)
 percarmaxsalgem <- mean(aantaljrmaxsalaris$percentage)
 ```
-Om te beginnen vind ik de vraag "After how many years are players at their top of their salary?" een beetje een verdraait beeld geven. Dit omdat het gek is om spelers die 1 jaar spelen te vergelijken met spelers die bijvoorbeeld 20 jaar spelen. Daarom wordt de vraag "Op hoeveel procent van de cariere wordt het maximum salaris berijkt?". Om deze vraag te beantwoorden moet de data aan een creteria voldoen, dit is dat een speler minimaal 3 jaar basebal moet spelen. Dit is omdat een groot deel van de spelers maar 1 of 2 jaar speeld en als een spelere maar 1 jaar speeld is dit dan het eerste of het laatste jaar? En bij de twee jaar is het meteen het eerste of het laatse en kan het niet ertussen zitten. Uit het vraagstuk is gekomen dat de meeste players in hun laatste jaar hun maximum salaris verdienen. Dit zou er ook mee te maken kunnen hebben dat het salaris in het algemeen stijgd over de jaren heen(dit is te zien in de plot bij het eerste vraagstuk).
+Om te beginnen vind ik de vraag "After how many years are players at their top of their salary?" een beetje een verdraait beeld geven. Dit omdat het gek is om spelers die 1 jaar spelen te vergelijken met spelers die bijvoorbeeld 20 jaar spelen. Daarom wordt de vraag "Op hoeveel procent van de cariere wordt het maximum salaris berijkt?". Om deze vraag te beantwoorden moet de data aan een creteria voldoen, dit is dat een speler minimaal 3 jaar basebal moet spelen. Dit is omdat een groot deel van de spelers maar 1 of 2 jaar speeld en als een speler maar 1 jaar speeld is dit dan het eerste of het laatste jaar? En bij de twee jaar is het meteen het eerste of het laatse en kan het niet ertussen zitten. Uit het vraagstuk is gekomen dat de meeste players in hun laatste jaar hun maximum salaris verdienen. Dit zou er ook mee te maken kunnen hebben dat het salaris in het algemeen stijgd over de jaren heen(dit is te zien in de plot bij het eerste vraagstuk).
+
+```{r player statistic based on batting}
+salaries3 <- Salaries %>% select(playerID, yearID, teamID, salary)
+masterInfo <- Master %>% select(playerID, birthYear, birthMonth, nameLast, nameFirst, bats, debut)
+
+batting <- battingStats() %>%
+  left_join(salaries3, by= c("playerID", "yearID", "teamID")) %>%
+  left_join(masterInfo, by="playerID") %>%
+  mutate(age = yearID - birthYear - 1L* (birthMonth >= 10)) %>%
+  arrange(playerID, yearID, stint)
+```
 
 
 ```{r maakt het salaris uit, kennelijk overbodig...}
@@ -570,6 +583,8 @@ db_gemsalaris <- db_Salaries %>%
 db_gemsalgoedenniet <- merge(x= db_bestspelermetsalaris, y= db_gemsalaris, by.x = "yearID", by.y = "yearID", all.x = TRUE)
 #### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
 ```
+
+
 
 
 ```{r}
