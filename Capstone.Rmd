@@ -19,11 +19,13 @@ if (!require("RMySQL")) install.packages("RMySQL")
 if (!require("Amelia")) install.packages("Amelia")
 if (!require("ggplot2")) install.packages("ggplot2")
 if (!require("lubridate")) install.packages("lubridate")
+if (!require("gridExtra")) install.packages("gridExtra")
 library(dplyr)
 library(RMySQL)
 library(Amelia)
 library(ggplot2)
 library(lubridate)
+library(gridExtra)
 ```
 
 \begin{titlepage}
@@ -440,6 +442,12 @@ db_Salaries %>% filter(playerID %in% top5Players)
 ```
 En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. Hier houd dus dit spoor op. Ook hebben we besloten om dit toch te documenteren aangezien dit soort conclusies namelijk ook bij Big-Data naar voren komen. Dit zou waarschijnlijk eerder naarboven zijn gekomen als wij besloten hadden om alle tabellen te mergen. Toch hebben we besloten dit niet te doen vanwege de mogelijke onoverzichtelijkheden.
 
+TBD
+```{r timeseries 3, eval=FALSE, include=FALSE}
+db_Teams %>% arrange(desc(W/G))
+```
+
+
 ```{r maakt het salaris uit voor het winnen}
 
 db_Salariesteam <- db_Salaries %>%
@@ -457,10 +465,64 @@ ggplot(data=db_Gemsalarisperrank, aes(x=yearID, y=gemsalptpj, color=Rank)) +
 geom_point()
 ```
 
-TBD
-```{r timeseries 3, eval=FALSE, include=FALSE}
-db_Teams %>% arrange(desc(W/G))
+
+```{r wat is het verschil tussen een goed en een minder goed team?}
+db_Teamsx <- db_Teams %>%
+  group_by(yearID, lgID, teamID) %>%
+  summarise(WL = W / L)
+
+db_Teamsy <-  merge(x= db_Teamsx, y= db_Teams , by.x = c("teamID", "lgID", "yearID"), by.y = c("teamID", "lgID", "yearID"), all.x = TRUE) %>%
+  filter(WL >= 2 | WL <= 0.5) %>%
+  filter(yearID >= 1970) %>%
+  mutate(sucsesfullornot = ifelse(WL <= 1, "nietsuccesvol", "succesvol" ))
+
+ggplot(data=db_Teamsy, aes(x=teamID, y=H, color=sucsesfullornot)) +
+geom_point() +
+ theme(axis.title.x=element_blank(),
+             axis.text.x=element_blank(),
+             axis.ticks.x=element_blank(),
+             panel.grid.major = element_blank(),
+             panel.grid.minor = element_blank(),
+             panel.background = element_blank()) +
+         labs(colour = "wel of geen sucsesvol team") +
+         labs(y = "Hits")
+
+ggplot(data=db_Teamsy, aes(x=teamID, y=HR, color=sucsesfullornot)) +
+geom_point() +
+ theme(axis.title.x=element_blank(),
+             axis.text.x=element_blank(),
+             axis.ticks.x=element_blank(),
+             panel.grid.major = element_blank(),
+             panel.grid.minor = element_blank(),
+             panel.background = element_blank()) +
+         labs(colour = "wel of geen sucsesvol team") +
+         labs(y = "Homeruns")
+
+ggplot(data=db_Teamsy, aes(x=teamID, y=SO, color=sucsesfullornot)) +
+geom_point() +
+ theme(axis.title.x=element_blank(),
+             axis.text.x=element_blank(),
+             axis.ticks.x=element_blank(),
+             panel.grid.major = element_blank(),
+             panel.grid.minor = element_blank(),
+             panel.background = element_blank()) +
+         labs(colour = "wel of geen sucsesvol team") +
+         labs(y = "Strike Outs")
+
+ggplot(data=db_Teamsy, aes(x=teamID, y=ERA, color=sucsesfullornot)) +
+geom_point() +
+ theme(axis.title.x=element_blank(),
+             axis.text.x=element_blank(),
+             axis.ticks.x=element_blank(),
+             panel.grid.major = element_blank(),
+             panel.grid.minor = element_blank(),
+             panel.background = element_blank()) +
+         labs(colour = "wel of geen sucsesvol team") +
+         labs(y = "Earned Run Average")
+
+
 ```
+Om te bepalen wat het grotste verschil is tussen een sucsesfull team en een niet succesfull team moet eerst bepaald worden wanneer een team sucsesfull is. Een team wordt in onze ogen pas succesfull geacht als een team een W/L ratio heeft van 2 of hoger en een niet sucsesfull bij een W/L van 0.5. Daarbuiten kijken we alleen naar de spelen van na 1970 zodat we alleen de data hebben van het modernere spel van nu. Uit de bovenstaande plots blijkt dat vooral de Hits en de Earned Run Average een groot verschil maakt tussen de succesvolle en niet succesvolle teams.
 
 ```{r top salaris, eval=FALSE, include=FALSE}
 db_Salariesx <- db_Salaries %>%
