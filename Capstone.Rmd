@@ -306,7 +306,7 @@ db_Salaries[db_Salaries == ""] = NA
 ```
 
 Na het correct indelen van de classes van elke variabelen en het correct beschouwen van de NA's kan in het Master tabel sommige datums beter ingedeeld worden. Dit bereiken wij door de onderstaande code.
-```{r Dates fixing}
+```{r Dates fixing, results="hide"}
 db_Master$birthDate = ymd(paste(db_Master$birthYear,db_Master$birthMonth,db_Master$birthDay,sep = "-"))
 db_Master$deathDate = ymd(paste(db_Master$deathYear,db_Master$deathMonth,db_Master$deathDay,sep = "-"))
 db_Master$debut = as.Date(db_Master$debut, format="%Y-%m-%d")
@@ -332,6 +332,7 @@ missmap(db_Pitching, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=F
 
 missmap(db_Fielding, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Fielding")
 ```
+
 Uit de missing map van het Pitching tabel valt op te maken dat de kolommen: GIDP, SF, SH en IBB aanzienlijk minder datapunten bevatten. Deze kolommen bevatten eerst compleet geen data, en na een bepaalde tijd wel. Dit zou betekenen dat deze data pas opgeslagen werd vanaf een bepaalde datum. Bij het tabel BAOpp is dit echter anders. Hier ontbreekt redelijk wat data echter niet structureel. Ik zou niet kunnen verklaren waarom deze datapunten missen.
 
 Bij het Fielding tabel mist er veel meer data. Voor de kolommen: ZR, WP, CS, SB en PB mist er erg onregelmatig data. Bij InnOuts is dit iets consistenter maar zit er ook nog steeds een apart gat. De missende waarden voor WP, CS, SB en PB zijn wel te verklaren. Deze variabelen gelden alleen voor Catchers, en aangezien het Fielding tabel spelers bevat voor alle posities zou het kunnen kloppen dat deze waarden alleen bekend zijn voor de catchers. de ZR (Zone Rating) kolom zou echter wel voor elke speler bekend moeten zijn, en niet voor enkele catchers. De aparte missende data bij InnsOuts heb ik echter ook geen verdere verklaring voor.
@@ -357,7 +358,7 @@ aantalG <- db_Pitching %>%
 
 ggplot(aantalG, aes(x=G, y=observaties)) +
   geom_point(color = "gray30", size=1) +
-  labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
+  labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid games die door een speler per jaar wordt gespeeld")
 
 ```
 Het plot hier boven laat ene scheve bimodale verdeling zien, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel minder correct aangezien er zich meerdere pieken in bevinden.
@@ -415,7 +416,7 @@ We beginnen met het timeseries plotten van de totale salarissen van de teams. Vo
 db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25) %>% ggplot(.,aes(x=yearID, y=total, group=teamID)) + geom_line(aes(color=teamID)) + ggtitle("Total team salary per year") + xlab("Year") + ylab("Total Salary in USD")
 ```
 
-Wat hier opvalt is dat de totale salarisuitgave van alle teams(ongeacht de hoeveelheid spelers) tot 1990 relatief dicht bij elkaar lag. Dit is in de loop van de jaren erg uit elkaar gaan lopen. Ook zijn er teams die extreem veel meer uitgeven aan hun spelers. Deze zullen wij nader onderzoeken.
+Wat hier opvalt is dat de totale salarisuitgave van alle teams(ongeacht de hoeveelheid spelers) tot 1990 relatief dicht bij elkaar lag. Dit is in de loop van de jaren erg uit elkaar gegroeid. Ook zijn er teams die extreem veel meer uitgeven aan hun spelers. Deze zullen wij nader bekijken.
 
 ```{r Timeseries 1.1}
 topTeams = db_Salaries %>% group_by(yearID, teamID) %>% summarise(total = sum(salary), total_players = n_distinct(playerID)) %>% filter(total_players>=25 & total >= 200000000) %>% pull(teamID) %>% unique()
@@ -548,7 +549,26 @@ De onderzoeksvraag \texit{After how many years are players at the top of their s
 \item[De speler moet minimaal 3 jaar actief zijn] Dit aangezien er ook een groot aantal speler zijn die maar enkele jaren spelen, en wij deze buiten beschouwing willen laten voor deze vraag.
 \end{description}
 
-```{r maakt het salaris uit, kennelijk overbodig...}
+
+\begin{thebibliography}{9}
+
+\bibitem{seanlahman} 
+Sean Lahman, Batting database explanation 2012,
+\\\texttt{http://seanlahman.com/files/database/readme2012.txt}
+
+\bibitem{houstonastros} 
+AD: Houston Astros verslaan Los Angeles Dodgers, 2017, \\\texttt{url{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}}
+
+\bibitem{minplayeramount} 
+Baseball Amanac: Baseball Rosters
+\\\texttt{url{http://www.baseball-almanac.com/articles/baseball_rosters.html/}}
+
+\bibitem{top5}
+The Top Tens: Baseball Players 
+\\\texttt{url{https://www.thetoptens.com/baseball-players/} \end{thebibliography}}
+\end{thebibliography}
+
+```{r maakt het salaris uit, eval=FALSE, include=FALSE}
 #### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
 db_AwardsSharePlayersMVP <- db_AwardsSharePlayers %>%
   filter(awardID == "MVP")
@@ -568,26 +588,3 @@ db_gemsalaris <- db_Salaries %>%
 db_gemsalgoedenniet <- merge(x= db_bestspelermetsalaris, y= db_gemsalaris, by.x = "yearID", by.y = "yearID", all.x = TRUE)
 #### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
 ```
-
-
-```{r}
-
-\begin{thebibliography}{9}
-
-\bibitem{seanlahman} 
-Sean Lahman, Batting database explanation 2012,
-\\\texttt{http://seanlahman.com/files/database/readme2012.txt}
-
-
-\bibitem{houstonastros} 
-AD: Houston Astros verslaan Los Angeles Dodgers, 2017, \\\texttt{url{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}}
-
-\bibitem{minplayeramount} 
-Baseball Amanac: Baseball Rosters
-\\\texttt{url{http://www.baseball-almanac.com/articles/baseball_rosters.html/}}
-
-\bibitem{top5}
-The Top Tens: Baseball Players 
-\\\texttt{url{https://www.thetoptens.com/baseball-players/} \end{thebibliography}}
-
-\end{thebibliography}
