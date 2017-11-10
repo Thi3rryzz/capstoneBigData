@@ -460,7 +460,7 @@ select(yearID, teamID, lgID, Rank, gemsalptpj) %>%
 ggplot(data=db_Gemsalarisperrank, aes(x=yearID, y=gemsalptpj, color=Rank)) +
 geom_point()
 ```
-
+Uit de bovenstaande plot blijkt dat er vroeger niet veel verschil was in het salaris. Daarbuiten blijkt dat het gemiddelde salaris van een team ook niet veel invloet had op de ranking. Nu, in de modernere wereld ziet u in de plot dat er een veel groter verschil is in het gemiddelde salaris per team. Daarnaast valt ook op dat de teams die een hoog gemiddeld salaris hebben over het algemeen hoger in de ranking eindigen.
 
 ```{r wat is het verschil tussen een goed en een minder goed team?}
 db_Teamsx <- db_Teams %>%
@@ -543,21 +543,8 @@ transform(percentage = (jaarmaxsalaris / spelendaantaljaar) * 100)
 percarmaxsalmed <- median(aantaljrmaxsalaris$percentage)
 percarmaxsalgem <- mean(aantaljrmaxsalaris$percentage)
 ```
-<<<<<<< HEAD
-Om te beginnen vind ik de vraag "After how many years are players at their top of their salary?" een beetje een verdraait beeld geven. Dit omdat het gek is om spelers die 1 jaar spelen te vergelijken met spelers die bijvoorbeeld 20 jaar spelen. Daarom wordt de vraag "Op hoeveel procent van de cariere wordt het maximum salaris berijkt?". Om deze vraag te beantwoorden moet de data aan een creteria voldoen, dit is dat een speler minimaal 3 jaar basebal moet spelen. Dit is omdat een groot deel van de spelers maar 1 of 2 jaar speeld en als een speler maar 1 jaar speeld is dit dan het eerste of het laatste jaar? En bij de twee jaar is het meteen het eerste of het laatse en kan het niet ertussen zitten. Uit het vraagstuk is gekomen dat de meeste players in hun laatste jaar hun maximum salaris verdienen. Dit zou er ook mee te maken kunnen hebben dat het salaris in het algemeen stijgd over de jaren heen(dit is te zien in de plot bij het eerste vraagstuk).
+Om te beginnen vind ik de vraag "After how many years are players at their top of their salary?" een beetje een verdraait beeld geven. Dit omdat het gek is om spelers die 1 jaar spelen te vergelijken met spelers die bijvoorbeeld 20 jaar spelen. Daarom wordt de vraag "Op hoeveel procent van de cariere wordt het maximum salaris berijkt?". Om deze vraag te beantwoorden moet de data aan een creteria voldoen, dit is dat een speler minimaal 3 jaar basebal moet spelen. Dit is omdat een groot deel van de spelers maar 1 of 2 jaar speeld en als een speler maar 1 jaar speeld is dit dan het eerste of het laatste jaar? En bij de twee jaar is het meteen het eerste of het laatse en kan het niet ertussen zitten.
 
-```{r player statistic based on batting}
-salaries3 <- Salaries %>% select(playerID, yearID, teamID, salary)
-masterInfo <- Master %>% select(playerID, birthYear, birthMonth, nameLast, nameFirst, bats, debut)
-
-batting <- battingStats() %>%
-  left_join(salaries3, by= c("playerID", "yearID", "teamID")) %>%
-  left_join(masterInfo, by="playerID") %>%
-  mutate(age = yearID - birthYear - 1L* (birthMonth >= 10)) %>%
-  arrange(playerID, yearID, stint)
-```
-=======
->>>>>>> 0a579d284c542e3117a3bdb244ad93646abeddcf
 
 \subsection{Onderzoeksvragen}
 
@@ -569,6 +556,21 @@ De onderzoeksvraag \texit{After how many years are players at the top of their s
 \begin{description}
 \item[De speler moet minimaal 3 jaar actief zijn] Dit aangezien er ook een groot aantal speler zijn die maar enkele jaren spelen, en wij deze buiten beschouwing willen laten voor deze vraag.
 \end{description}
+
+- waarom 3 jaar actief?
+- Uit het vraagstuk is gekomen dat de meeste players in hun laatste jaar hun maximum salaris verdienen. Dit zou er ook mee te maken kunnen hebben dat het salaris in het algemeen stijgd over de jaren heen(dit is te zien in de plot bij het eerste vraagstuk).
+
+```{r player statistic based on batting}
+salaries3 <- Salaries %>% select(playerID, yearID, teamID, salary)
+masterInfo <- Master %>% select(playerID, birthYear, birthMonth, nameLast, nameFirst, bats, debut)
+
+batting <- battingStats() %>%
+  left_join(salaries3, by= c("playerID", "yearID", "teamID")) %>%
+  left_join(masterInfo, by="playerID") %>%
+  mutate(age = yearID - birthYear - 1L* (birthMonth >= 10)) %>%
+  arrange(playerID, yearID, stint)
+```
+
 
 ```{r maakt het salaris uit, kennelijk overbodig...}
 #### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
