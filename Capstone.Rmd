@@ -476,4 +476,15 @@ Sean Lahman, Batting database explanation 2012,
 \\\texttt{http://seanlahman.com/files/database/readme2012.txt}
 
 
+\bibitem{houstonastros} 
+AD: Houston Astros verslaan Los Angeles Dodgers, 2017, \\\texttt{url{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}}
+
+\bibitem{minplayeramount} 
+Baseball Amanac: Baseball Rosters
+\\\texttt{url{http://www.baseball-almanac.com/articles/baseball_rosters.html/}}
+
+\bibitem{top5}
+The Top Tens: Baseball Players 
+\\\texttt{url{https://www.thetoptens.com/baseball-players/} \end{thebibliography}}
+
 \end{thebibliography}
