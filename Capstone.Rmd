@@ -102,9 +102,10 @@ Enkele problemen die kunnen ontstaan bij het samenvoegen van tabellen:
 \end{itemize}
 
 Door alle tabellen uit de database te bekijken zijn we tot onderstaand ERD gekomen:
-
+\includegraphics{ERD}
 
 \subsubsection{Datawarehouse}
+\includegraphics{DWH}
 
 \subsection{Extract Transform Load}
 Na het opstellen van het ERD en het DWH kunnen we beginnen aan het ETL proces. Des te beter dit proces wordt uitgevoerd, des te makkelijker het daadwerkelijke data analyse proces wordt. De data is opgeslagen in een lokale MySQL Database.
@@ -330,8 +331,6 @@ Vervolgens kijken wij van de Pitching en Fielding tabellen naar de ontbrekende d
 missmap(db_Pitching, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Pitching")
 
 missmap(db_Fielding, col=c("black", "grey"), y.labels=NULL, y.at = NULL,legend=FALSE, main="Missingness Map of Fielding")
-
-
 ```
 Uit de missing map van het Pitching tabel valt op te maken dat de kolommen: GIDP, SF, SH en IBB aanzienlijk minder datapunten bevatten. Deze kolommen bevatten eerst compleet geen data, en na een bepaalde tijd wel. Dit zou betekenen dat deze data pas opgeslagen werd vanaf een bepaalde datum. Bij het tabel BAOpp is dit echter anders. Hier ontbreekt redelijk wat data echter niet structureel. Ik zou niet kunnen verklaren waarom deze datapunten missen.
 
@@ -340,7 +339,6 @@ Bij het Fielding tabel mist er veel meer data. Voor de kolommen: ZR, WP, CS, SB 
 \subsubsection{Distributie}
 
 We nemen als voorbeeld de kolommen G(Games) en HR(Homeruns) van het Pitching tabel en kijken naar de verdeling. 
-
 ```{r verdelingen}
 aantalHR <- db_Pitching %>%
   group_by(HR)%>%
@@ -349,7 +347,10 @@ aantalHR <- db_Pitching %>%
 ggplot(aantalHR, aes(x=HR, y=observaties)) +
   geom_point(color = "gray30", size=1) +
   labs(y= "Aantal observaties", x = "Aantal homeruns per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal homeruns opnieuw geteld" , title = "Het aantal hoeveelheid homeruns worden er door een speler per jaar gemaakt")
+```
+Hier zien wij een positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentieel voorspelmodel relatief correct aangezien er niet 2 pieken in voorkomen.
 
+```{r verdeling 1.1}
 aantalG <- db_Pitching %>%
   group_by(G)%>%
    summarise(observaties = n())
@@ -359,9 +360,7 @@ ggplot(aantalG, aes(x=G, y=observaties)) +
   labs(y= "Aantal observaties", x = "Aantal games per speler per jaar \n note: Wanneer een speler midden in zijn jaar van team veranderd, \n dan worden zijn aantal games opnieuw geteld" , title = "Het aantal hoeveelheid gamesdie door een speler per jaar wordt gespeeld")
 
 ```
-<<<<<<< HEAD
-De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentiele voorspelmodel betrouwbaar omdat de plot exponenteel is.
-De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel onbetrouwbaar omdat de plot niet exponenteel is.
+Het plot hier boven laat ene scheve bimodale verdeling zien, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentiele voorspelmodel minder correct aangezien er zich meerdere pieken in bevinden.
 
 time series:
 ```{r time series}
@@ -375,10 +374,6 @@ db_Salariestime$yearID = as.character(db_Salariestime$yearID)
 ggplot()+
   geom_line(data=db_Appearances, aes(yearID, G_all, color=as.factor(playerID)))
 ```
-
-De eerste plot is positief scheve verdeling, dit houd in dat de grafiek asymmetrisch is omdat een natuurlijke limiet uitkomsten aan één kant voorkomt. De piek van de verdeling is uit het midden verplaatst in de richting van de limiet. Dit maakt een potentieel voorspelmodel betrouwbaar omdat de plot exponentieel is.
-De tweede plot is een scheve bimodale verdeling, dit houd in dat er meerdere verdelingen gecombineerd zijn en dat de grafiek asymmetrisch is.  Dit maakt een potentieel voorspelmodel onbetrouwbaar omdat de plot niet exponentieel is.
-
 
 \subsubsection{Relaties}
 De laatste stap van de data exploratie is het bekijken van mogelijke correlaties tussen verschillende variabelen. Dit kan erg gemakkelijk met behulp van de pairs functie.
