@@ -444,13 +444,7 @@ db_Salaries %>% filter(playerID %in% top5Players)
 ```
 En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. Hier houd dus dit spoor op. Ook hebben we besloten om dit toch te documenteren aangezien dit soort conclusies namelijk ook bij Big-Data naar voren komen. Dit zou waarschijnlijk eerder naarboven zijn gekomen als wij besloten hadden om alle tabellen te mergen. Toch hebben we besloten dit niet te doen vanwege de mogelijke onoverzichtelijkheden.
 
-TBD
-```{r timeseries 3, eval=FALSE, include=FALSE}
-db_Teams %>% arrange(desc(W/G))
-```
-
-
-```{r maakt het salaris uit voor het winnen}
+```{r maakt het salaris uit voor het winnen, eval=FALSE, include=FALSE}
 
 db_Salariesteam <- db_Salaries %>%
 group_by(yearID, teamID) %>%
@@ -549,6 +543,7 @@ transform(percentage = (jaarmaxsalaris / spelendaantaljaar) * 100)
 percarmaxsalmed <- median(aantaljrmaxsalaris$percentage)
 percarmaxsalgem <- mean(aantaljrmaxsalaris$percentage)
 ```
+<<<<<<< HEAD
 Om te beginnen vind ik de vraag "After how many years are players at their top of their salary?" een beetje een verdraait beeld geven. Dit omdat het gek is om spelers die 1 jaar spelen te vergelijken met spelers die bijvoorbeeld 20 jaar spelen. Daarom wordt de vraag "Op hoeveel procent van de cariere wordt het maximum salaris berijkt?". Om deze vraag te beantwoorden moet de data aan een creteria voldoen, dit is dat een speler minimaal 3 jaar basebal moet spelen. Dit is omdat een groot deel van de spelers maar 1 of 2 jaar speeld en als een speler maar 1 jaar speeld is dit dan het eerste of het laatste jaar? En bij de twee jaar is het meteen het eerste of het laatse en kan het niet ertussen zitten. Uit het vraagstuk is gekomen dat de meeste players in hun laatste jaar hun maximum salaris verdienen. Dit zou er ook mee te maken kunnen hebben dat het salaris in het algemeen stijgd over de jaren heen(dit is te zien in de plot bij het eerste vraagstuk).
 
 ```{r player statistic based on batting}
@@ -561,7 +556,19 @@ batting <- battingStats() %>%
   mutate(age = yearID - birthYear - 1L* (birthMonth >= 10)) %>%
   arrange(playerID, yearID, stint)
 ```
+=======
+>>>>>>> 0a579d284c542e3117a3bdb244ad93646abeddcf
 
+\subsection{Onderzoeksvragen}
+
+\subsubsection{Team prestatie}
+
+\subsubsection{Spelersprestatie}
+\subsubsubsection{In welk jaar van je carriére verdien je het meest.}
+De onderzoeksvraag \texit{After how many years are players at the top of their salary?} kan een vertekend beeld geven. Niet elke speler is gelijk, Speelt even veel jaar. en in dezelfde periode. Daarom kan er snel gemeten worden met twee maten. Daarom interperteren wij de vraag als volgt: \texit{In welk percentage van de loopbaan van een speler verdient hij/zij het meest} Om deze vraag te kunnen beantwoorden kan het helpen om een randvoorwaarde te stellen. Wij hebben deze bepaald op het volgende:
+\begin{description}
+\item[De speler moet minimaal 3 jaar actief zijn] Dit aangezien er ook een groot aantal speler zijn die maar enkele jaren spelen, en wij deze buiten beschouwing willen laten voor deze vraag.
+\end{description}
 
 ```{r maakt het salaris uit, kennelijk overbodig...}
 #### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
@@ -595,5 +602,16 @@ db_gemsalgoedenniet <- merge(x= db_bestspelermetsalaris, y= db_gemsalaris, by.x 
 Sean Lahman, Batting database explanation 2012,
 \\\texttt{http://seanlahman.com/files/database/readme2012.txt}
 
+
+\bibitem{houstonastros} 
+AD: Houston Astros verslaan Los Angeles Dodgers, 2017, \\\texttt{url{https://www.ad.nl/andere-sporten/houston-astros-verslaan-los-angeles-dodgers-met-5-1~a6904dad}}
+
+\bibitem{minplayeramount} 
+Baseball Amanac: Baseball Rosters
+\\\texttt{url{http://www.baseball-almanac.com/articles/baseball_rosters.html/}}
+
+\bibitem{top5}
+The Top Tens: Baseball Players 
+\\\texttt{url{https://www.thetoptens.com/baseball-players/} \end{thebibliography}}
 
 \end{thebibliography}
