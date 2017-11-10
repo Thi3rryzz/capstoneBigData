@@ -20,12 +20,14 @@ if (!require("Amelia")) install.packages("Amelia")
 if (!require("ggplot2")) install.packages("ggplot2")
 if (!require("lubridate")) install.packages("lubridate")
 if (!require("gridExtra")) install.packages("gridExtra")
+if (!require("Lahman")) install.packages("Lahman")
 library(dplyr)
 library(RMySQL)
 library(Amelia)
 library(ggplot2)
 library(lubridate)
 library(gridExtra)
+library(Lahman)
 ```
 
 \begin{titlepage}
@@ -454,7 +456,7 @@ select(yearID, teamID, lgID, Rank, gemsalptpj) %>%
 ggplot(data=db_Gemsalarisperrank, aes(x=yearID, y=gemsalptpj, color=Rank)) +
 geom_point()
 ```
-
+Uit de bovenstaande plot blijkt dat er vroeger niet veel verschil was in het salaris. Daarbuiten blijkt dat het gemiddelde salaris van een team ook niet veel invloet had op de ranking. Nu, in de modernere wereld ziet u in de plot dat er een veel groter verschil is in het gemiddelde salaris per team. Daarnaast valt ook op dat de teams die een hoog gemiddeld salaris hebben over het algemeen hoger in de ranking eindigen.
 
 ```{r wat is het verschil tussen een goed en een minder goed team?}
 db_Teamsx <- db_Teams %>%
@@ -537,6 +539,8 @@ transform(percentage = (jaarmaxsalaris / spelendaantaljaar) * 100)
 percarmaxsalmed <- median(aantaljrmaxsalaris$percentage)
 percarmaxsalgem <- mean(aantaljrmaxsalaris$percentage)
 ```
+Om te beginnen vind ik de vraag "After how many years are players at their top of their salary?" een beetje een verdraait beeld geven. Dit omdat het gek is om spelers die 1 jaar spelen te vergelijken met spelers die bijvoorbeeld 20 jaar spelen. Daarom wordt de vraag "Op hoeveel procent van de cariere wordt het maximum salaris berijkt?". Om deze vraag te beantwoorden moet de data aan een creteria voldoen, dit is dat een speler minimaal 3 jaar basebal moet spelen. Dit is omdat een groot deel van de spelers maar 1 of 2 jaar speeld en als een speler maar 1 jaar speeld is dit dan het eerste of het laatste jaar? En bij de twee jaar is het meteen het eerste of het laatse en kan het niet ertussen zitten.
+
 
 \subsection{Onderzoeksvragen}
 
@@ -546,9 +550,27 @@ percarmaxsalgem <- mean(aantaljrmaxsalaris$percentage)
 \subsubsubsection{In welk jaar van je carriére verdien je het meest.}
 De onderzoeksvraag \texit{After how many years are players at the top of their salary?} kan een vertekend beeld geven. Niet elke speler is gelijk, Speelt even veel jaar. en in dezelfde periode. Daarom kan er snel gemeten worden met twee maten. Daarom interperteren wij de vraag als volgt: \texit{In welk percentage van de loopbaan van een speler verdient hij/zij het meest} Om deze vraag te kunnen beantwoorden kan het helpen om een randvoorwaarde te stellen. Wij hebben deze bepaald op het volgende:
 \begin{description}
-\item[De speler moet minimaal 3 jaar actief zijn] Dit aangezien er ook een groot aantal speler zijn die maar enkele jaren spelen, en wij deze buiten beschouwing willen laten voor deze vraag.
+\item[De speler moet minimaal 3 jaar actief zijn] Dit aangezien er ook een groot aantal spelers zijn die maar enkele jaren spelen. Dit is een te korte periode als een echte carriére te beschouwen en zal mogelijk resulteren in een ongeldige conclusie. Daarom zullen wij deze groep buiten beschouwing laten bij dit vraagstuk
 \end{description}
 
+- Uit het vraagstuk is gekomen dat de meeste players in hun laatste jaar hun maximum salaris verdienen. Dit zou er ook mee te maken kunnen hebben dat het salaris in het algemeen stijgd over de jaren heen(dit is te zien in de plot bij het eerste vraagstuk).
+
+```{r player statistic based on batting}
+salaries3 <- Salaries %>% select(playerID, yearID, teamID, salary)
+masterInfo <- Master %>% select(playerID, birthYear, birthMonth, nameLast, nameFirst, bats, debut)
+
+batting <- battingStats() %>%
+  left_join(salaries3, by= c("playerID", "yearID", "teamID")) %>%
+  left_join(masterInfo, by="playerID") %>%
+  mutate(age = yearID - birthYear - 1L* (birthMonth >= 10)) %>%
+  arrange(playerID, yearID, stint)
+```
+
+
+The Batting does not contain batting statistics derived from those present in the data.frame\cite{lahmanderived}. This
+function calculates batting average (BA), plate appearances (PA), total bases (TB), slugging percentage
+(SlugPct), on-base percentage (OBP), on-base percentage + slugging (OPS), and batting average
+on balls in play (BABIP) for each record in a Batting-like data.frame
 
 \begin{thebibliography}{9}
 
@@ -565,10 +587,36 @@ Baseball Amanac: Baseball Rosters
 
 \bibitem{top5}
 The Top Tens: Baseball Players 
-\\\texttt{url{https://www.thetoptens.com/baseball-players/} \end{thebibliography}}
-\end{thebibliography}
+\\\texttt{url{https://www.thetoptens.com/baseball-players/} 
+
+\bibitem{lahmanderived}
+Sean Lahman: Lahman
+\\\texttt{url{https://cran.r-project.org/web/packages/Lahman/Lahman.pdf}}
+\end{thebibliography}}
+
 
 ```{r maakt het salaris uit, eval=FALSE, include=FALSE}
+#### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
+db_AwardsSharePlayersMVP <- db_AwardsSharePlayers %>%
+  filter(awardID == "MVP")
+
+db_bestspelermetsalaris <- db_Salaries %>%
+  group_by(yearID) %>%
+  merge(x= db_AwardsSharePlayersMVP, y= db_Salaries, by.x = c("playerID", "yearID"), by.y = c("playerID", "yearID"), all.x = TRUE) %>%
+  arrange(yearID) %>%
+filter(!is.na(salary)) %>%
+  group_by(yearID) %>%
+  summarise(gemsalarisbestplayers = mean(salary))
+  
+db_gemsalaris <- db_Salaries %>%
+  group_by(yearID) %>%
+  summarise(gemsalpjr = mean(salary))
+
+db_gemsalgoedenniet <- merge(x= db_bestspelermetsalaris, y= db_gemsalaris, by.x = "yearID", by.y = "yearID", all.x = TRUE)
+#### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
+```
+
+```{r maakt het salaris uit, kennelijk overbodig... , eval=FALSE, include=FALSE}
 #### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
 db_AwardsSharePlayersMVP <- db_AwardsSharePlayers %>%
   filter(awardID == "MVP")
