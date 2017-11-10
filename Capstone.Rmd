@@ -446,13 +446,29 @@ db_Salaries %>% filter(playerID %in% top5Players)
 ```
 En zoals we kunnen zien is van geen enkele van deze spelers hun salaris bekend. Hier houd dus dit spoor op. Dit waarschijnlijk eerder naarboven zijn gekomen als wij besloten hadden om alle tabellen te mergen. Toch hebben we besloten dit niet te doen vanwege de mogelijke onoverzichtelijkheden.
 
+```{r maakt het salaris uit voor het winnen}
+
+db_Salariesteam <- db_Salaries %>%
+group_by(yearID, teamID) %>%
+summarise(gemsalptpj= mean(salary))
+
+db_Gemsalarisperrank<- merge(x= db_Salariesteam, y= db_Teams , by.x = c("teamID", "yearID"), by.y = c("teamID", "yearID"), all.x = TRUE) %>%
+select(yearID, teamID, lgID, Rank, gemsalptpj) %>%
+  group_by(yearID, lgID, Rank) %>%
+  filter(gemsalptpj == max(gemsalptpj)) %>%
+  filter(lgID == "AL") %>%
+  arrange(yearID, Rank)
+
+ggplot(data=db_Gemsalarisperrank, aes(x=yearID, y=gemsalptpj, color=Rank)) +
+geom_point()
+```
 
 
 ```{r top salaris}
 db_Salariesx <- db_Salaries %>%
   group_by(playerID) %>%
   add_count(playerID) %>%
-  filter(n >= 5) %>%
+  filter(n >= 3) %>%
   filter(yearID == min(yearID) | salary == max(salary))
 
 db_Salariesy <- db_Salariesx %>%
@@ -461,15 +477,42 @@ db_Salariesy <- db_Salariesx %>%
 db_Salariesxy <- db_Salaries %>%
   group_by(playerID) %>%
    add_count(playerID) %>%
-  filter(n >= 5) %>%
+  filter(n >= 3) %>%
   filter(yearID == min(yearID) | yearID == max(yearID)) %>%
   summarise(spelendaantaljaar = max(yearID) - min(yearID))
   
 aantaljrmaxsalaris <- merge(db_Salariesy, db_Salariesxy, by = "playerID") %>%
 transform(percentage = (jaarmaxsalaris / spelendaantaljaar) * 100)
 
-percarmaxsal <- mean(aantaljrmaxsalaris$percentage)
+percarmaxsalmed <- median(aantaljrmaxsalaris$percentage)
+percarmaxsalgem <- mean(aantaljrmaxsalaris$percentage)
 ```
+Om te beginnen vind ik de vraag "After how many years are players at their top of their salary?" een beetje een verdraait beeld geven. Dit omdat het gek is om spelers die 1 jaar spelen te vergelijken met spelers die bijvoorbeeld 20 jaar spelen. Daarom wordt de vraag "Op hoeveel procent van de cariere wordt het maximum salaris berijkt?". Om deze vraag te beantwoorden moet de data aan een creteria voldoen, dit is dat een speler minimaal 3 jaar basebal moet spelen. Dit is omdat een groot deel van de spelers maar 1 of 2 jaar speeld en als een spelere maar 1 jaar speeld is dit dan het eerste of het laatste jaar? En bij de twee jaar is het meteen het eerste of het laatse en kan het niet ertussen zitten. Uit het vraagstuk is gekomen dat de meeste players in hun laatste jaar hun maximum salaris verdienen. Dit zou er ook mee te maken kunnen hebben dat het salaris in het algemeen stijgd over de jaren heen(dit is te zien in de plot bij het eerste vraagstuk).
+
+
+```{r maakt het salaris uit, kennelijk overbodig...}
+#### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
+db_AwardsSharePlayersMVP <- db_AwardsSharePlayers %>%
+  filter(awardID == "MVP")
+
+db_bestspelermetsalaris <- db_Salaries %>%
+  group_by(yearID) %>%
+  merge(x= db_AwardsSharePlayersMVP, y= db_Salaries, by.x = c("playerID", "yearID"), by.y = c("playerID", "yearID"), all.x = TRUE) %>%
+  arrange(yearID) %>%
+filter(!is.na(salary)) %>%
+  group_by(yearID) %>%
+  summarise(gemsalarisbestplayers = mean(salary))
+  
+db_gemsalaris <- db_Salaries %>%
+  group_by(yearID) %>%
+  summarise(gemsalpjr = mean(salary))
+
+db_gemsalgoedenniet <- merge(x= db_bestspelermetsalaris, y= db_gemsalaris, by.x = "yearID", by.y = "yearID", all.x = TRUE)
+#### dit stuk beantwoord de eerste vraag niet verkeerd opgevat miss later nog handig
+```
+
+
+```{r}
 
 \begin{thebibliography}{9}
 
