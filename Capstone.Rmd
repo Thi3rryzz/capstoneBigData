@@ -614,8 +614,11 @@ summarise(Gemmidelde_Saves_per_game= sum(SV,na.rm = TRUE)/sum(G,na.rm = TRUE),
           Gemmidelde_Doubles_per_game = sum(X2B, na.rm = TRUE)/sum(G, na.rm = TRUE),
           Gemmidelde_Triples_per_game = sum(X3B, na.rm = TRUE)/sum(G, na.rm = TRUE))
 
+<<<<<<< HEAD
 decompose(db_Teamstime, type = c("additive", "multiplicative"))
 
+=======
+>>>>>>> c52e2d5849038672ca840b1b0b1d261d66834cdc
 ggplot(data=db_Teamstime, aes(x=yearID)) +
 geom_line(aes(y=Gemmidelde_Homeruns_per_game)) +
   geom_smooth(aes(y=Gemmidelde_Homeruns_per_game),method = "lm") +
@@ -644,6 +647,7 @@ Uit de bovenstaande plot is op te maken dat
 
 ```
 
+<<<<<<< HEAD
 ```{r homegames beter?}
 db_HomeGames1 <- db_HomeGames %>%
 select(year.key,league.key, team.key, games) %>%
@@ -667,6 +671,9 @@ ggcorr(db_Gamehomegame[, 4:10], geom = "blank", label = TRUE, hjust = 0.75) +
   guides(color = FALSE, alpha = FALSE)
 ```
 Om deze onderzoeksvraag te beandwoorden moet er eigelijk een dataset zijn waarin er per wedstrijd de stats van een game te zien is en wie er thuis speeld. Nu is alleen te zien hoeveel totale wedstrijden er zijn en hoeveel daarvan thuis zijn gespeeld.
+=======
+
+>>>>>>> c52e2d5849038672ca840b1b0b1d261d66834cdc
 \begin{thebibliography}{9}
 
 \bibitem{seanlahman} 
