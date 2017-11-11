@@ -295,8 +295,6 @@ db_Teams$attendance = as.integer(db_Teams$attendance)
 db_Teams$teamIDBR = as.factor(db_Teams$teamIDBR)
 db_Teams$teamIDlahman45 = as.factor(db_Teams$teamIDlahman45)
 db_Teams$teamIDretro = as.factor(db_Teams$teamIDretro)
-setnames(data_table, "'2B'", "X2B")
-setnames(data_table, "'3B'", "X3B")
 names(db_Teams)[names(db_Teams) == "2B"] <- "X2B"
 names(db_Teams)[names(db_Teams) == "3B"] <- "X3B"
 
@@ -309,7 +307,6 @@ De ontbrekende variabelen worden nu ook nog niet als een N/A beschouwd. Dit loss
 db_Pitching[db_Pitching == ""] = NA
 db_Batting[db_Batting == ""] = NA
 db_Fielding[db_Fielding == ""] = NA
-db_Master[db_Master == ""] = NA
 db_Teams[db_Teams == ""] = NA
 db_Salaries[db_Salaries == ""] = NA
 ```
@@ -614,11 +611,8 @@ summarise(Gemmidelde_Saves_per_game= sum(SV,na.rm = TRUE)/sum(G,na.rm = TRUE),
           Gemmidelde_Doubles_per_game = sum(X2B, na.rm = TRUE)/sum(G, na.rm = TRUE),
           Gemmidelde_Triples_per_game = sum(X3B, na.rm = TRUE)/sum(G, na.rm = TRUE))
 
-<<<<<<< HEAD
 decompose(db_Teamstime, type = c("additive", "multiplicative"))
 
-=======
->>>>>>> c52e2d5849038672ca840b1b0b1d261d66834cdc
 ggplot(data=db_Teamstime, aes(x=yearID)) +
 geom_line(aes(y=Gemmidelde_Homeruns_per_game)) +
   geom_smooth(aes(y=Gemmidelde_Homeruns_per_game),method = "lm") +
@@ -647,8 +641,11 @@ Uit de bovenstaande plot is op te maken dat
 
 ```
 
-<<<<<<< HEAD
-```{r homegames beter?}
+The configuration of a ballpark and the weather of the city can have an impact on run scoring. How does run scoring vary between ballpark?
+
+Na lang onderzoeken wat de mogelijkheden zijn om deze vraag te kunnen beantwoorden zijn we erachter gekomen dat er geen goede mogelijke mannier is om deze vraag te beantwoorden. Voor deze vraag moet namelijk bekend zijn wat de gebeurtenissen zijn per park, dit is niet te achterhalen met deze dataset. In Teams wordt weergegeven wat het aantal games is van dit team en wat hun homepark is, echter wordt er geen onderschijt gemaakt tussen de uit en thuiswedstrijden. Hierdoor is niet te achterhalen welke bepaalde gebeurtenissen zoals een homerun is voorgekomen in het thuispark of een uitpark. Ook uit de dataset batting kan wel achterhaalt worden welke speler bij welk team hoort en wat dan zijn homepark is, maar ook nu kan er niet achterhaald worden waar de stats van deze speler heeft plaats gevonden, uit of thuis in een ander park.
+
+```{r In soccer it is said that there is a home advantage, can you investigate whether the home advantage does really exist in baseball?}
 db_HomeGames1 <- db_HomeGames %>%
 select(year.key,league.key, team.key, games) %>%
   group_by(year.key, league.key, team.key) %>%
@@ -659,21 +656,20 @@ db_Gamehomegame <-  merge(x= db_Teams, y= db_HomeGames1 , by.x = c("teamID", "ye
   group_by(yearID, lgID, teamID) %>%
   mutate(uitgames = G - thuisgames) %>%
   select(yearID, lgID, teamID, Rank, thuisgames, uitgames, W, L) %>%
-  filter(uitgames > 0)
+  filter(uitgames > 0) %>%
   mutate(thuisuitratio = thuisgames / uitgames) %>%
   mutate(winverliesratio = W / L)
-
-summary(db_Gamehomegame)
 
 ggcorr(db_Gamehomegame[, 4:10], geom = "blank", label = TRUE, hjust = 0.75) +
   geom_point(size = 10, aes(color = coefficient > 0, alpha = abs(coefficient) > 0.5)) +
   scale_alpha_manual(values = c("TRUE" = 0.25, "FALSE" = 0)) +
   guides(color = FALSE, alpha = FALSE)
 ```
-Om deze onderzoeksvraag te beandwoorden moet er eigelijk een dataset zijn waarin er per wedstrijd de stats van een game te zien is en wie er thuis speeld. Nu is alleen te zien hoeveel totale wedstrijden er zijn en hoeveel daarvan thuis zijn gespeeld.
-=======
+Om deze onderzoekvraag te beandwoorden moet er eerst berekend worden wat de win/lose ratio is van een team per jaar per league. Vervolgens moet ok de Thuis/Uit ratio berekend worden per team per jaar per league. Vervolgens moeten deze twee colommen met elkaar vergeleken worden in een correlatie plot. Uit deze correlatieplot is gebleken dat er een correlalatie is van 0 tussen de win/lose ratio en de thuis/uit ratio. Er blijkt dus geen voordeel te zijn voor het thuisspelende team.
+Deze onderzoeksvraag had beter en specifieker beantwoord kunnen worden als er een dataset zou zijn waarin de resultaten mer wedstijd waren weergegeven met daarbij welk team thuis speeld. Op deze mannier kan er per wedstrijd vergeleken worden en niet het totale resultaat van één jaar. Dit maakt de uitslag namelijk minder betrouwbaar.
 
->>>>>>> c52e2d5849038672ca840b1b0b1d261d66834cdc
+
+
 \begin{thebibliography}{9}
 
 \bibitem{seanlahman} 
