@@ -22,6 +22,8 @@ if (!require("lubridate")) install.packages("lubridate")
 if (!require("gridExtra")) install.packages("gridExtra")
 if (!require("Lahman")) install.packages("Lahman")
 if (!require("GGally")) install.packages("GGally")
+if (!require("plyr")) install.packages("plyr")
+if (!require("reshape2")) install.packages("reshape2")
 library(dplyr)
 library(RMySQL)
 library(Amelia)
@@ -30,6 +32,8 @@ library(lubridate)
 library(gridExtra)
 library(Lahman)
 library(GGally)
+library(plyr)
+library( reshape2 )
 ```
 
 \begin{titlepage}
@@ -635,9 +639,13 @@ Uit de bovenstaande plot is op te maken dat
 
 ```
 
-```{r veranderd de batting preformance over het seizoen}
-
-
+```{r How has the variability of batting performances changed over seasons? And how does this relate to the mean batting performances?}
+db_Battingsd <- db_Batting %>%
+  select(yearID, HR) %>%
+  group_by(yearID) %>% 
+  na.omit() %>%
+  mutate(mean = mean(HR)) %>%
+  mutate(sd = sd(HR))
 
 ```
 
